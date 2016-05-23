@@ -1,0 +1,28 @@
+body{
+    height: 70px;
+    width: 140px;
+}
+
+h1, h2, h3, a, p{
+    font-family: 'Roboto', sans-serif;
+}
+
+h1{
+    font-size: 15px;
+    font-weight: 800;
+}
+p{
+    font-size: 12px;
+    font-weight: 300;
+}
+ul
+{
+    list-style-type: none;
+    margin: 1em 0;
+    padding: 0; 
+}
+li{
+    font-size: 10px;
+    background: rgba(0,0,0,.05);
+    padding: 1em; 
+}

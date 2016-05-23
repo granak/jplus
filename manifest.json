@@ -1,0 +1,45 @@
+{
+    "name": "Jira(+)",
+    "description": "Additional Jira functionality and improvements",
+    "version": "1.0.6",
+    "manifest_version": 2,
+    "page_action": {
+        "default_icon": "jira-icon.png",
+        "default_popup": "popup.html"
+    },
+    "permissions": [
+        "declarativeContent",
+        "tabs",
+        "storage"
+    ],
+    "background": {
+        "scripts": [
+            "background.js"
+        ]
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "http://*/*",
+                "https://*/*"
+            ],
+            "js": [
+                "jquery-2.2.0.min.js",
+                "content.js"
+            ],
+            "css": [
+                "styles/signal.css"
+            ]
+        }
+    ],
+    "icons": {
+        "16": "jira-icon.png",
+        "48": "jira-icon.png",
+        "128": "jira-icon.png"
+    },
+    "web_accessible_resources": [
+        "jira-modifications/extra-active-board.js",
+        "jira-modifications/extra-planning-board.js",
+        "jira-modifications/signal-loading.js"
+    ]
+}
