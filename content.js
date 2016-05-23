@@ -27,20 +27,23 @@ function makeActiveBoardMutation() {
     var activeScriptInjected = false;
 
     // Add a target node to the observer. Can only add one node at a time.
-    $.each(targetNodes, function(index, item) {
-        item.each(function() {
+    $.each(targetNodes, function (index, item) {
+        item.each(function () {
             myObserver.observe(this, obsConfig);
         });
     });
 
     function mutationHandler(mutationRecords) {
         //console.debug("Jira(+) --- mutationhandler ");
-        mutationRecords.forEach(function(mutation) {
+        mutationRecords.forEach(function (mutation) {
             // console.debug(mutation);
             if (typeof mutation.attributes) {
                 if (mutation.target.id === 'ghx-work' && mutation.target.style.display !== 'none' && !activeScriptInjected) {
                     // console.debug("Jira(+) --- ghx-work visible");
                     injectScript('jira-modifications/extra-active-board.js');
+                    if ($('#ghx-board-name').attr('data-view-id') == "1205") {
+                        injectScript('jira-modifications/definition-of-done.js');
+                    }
                     activeScriptInjected = true;
                 }
                 if (mutation.target.id === 'ghx-plan' && mutation.target.style.display !== 'none' && !planningScriptInjected) {

@@ -1,7 +1,7 @@
 {
     "name": "Jira(+)",
     "description": "Additional Jira functionality and improvements",
-    "version": "1.0.6",
+    "version": "1.1.6",
     "manifest_version": 2,
     "page_action": {
         "default_icon": "jira-icon.png",
@@ -26,6 +26,9 @@
             "js": [
                 "jquery-2.2.0.min.js",
                 "content.js"
+            ],
+            "css": [
+                "styles/plus.css"
             ]
         }
     ],
@@ -36,6 +39,7 @@
     },
     "web_accessible_resources": [
         "jira-modifications/extra-active-board.js",
-        "jira-modifications/extra-planning-board.js"
+        "jira-modifications/extra-planning-board.js",
+        "jira-modifications/definition-of-done.js"
     ]
 }
