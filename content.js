@@ -40,13 +40,11 @@ function makeActiveBoardMutation() {
             if (typeof mutation.attributes) {
                 if (mutation.target.id === 'ghx-work' && mutation.target.style.display !== 'none' && !activeScriptInjected) {
                     // console.debug("Jira(+) --- ghx-work visible");
-                    injectScript('jira-modifications/signal-loading.js');
                     injectScript('jira-modifications/extra-active-board.js');
                     activeScriptInjected = true;
                 }
                 if (mutation.target.id === 'ghx-plan' && mutation.target.style.display !== 'none' && !planningScriptInjected) {
                     // console.debug("Jira(+) --- ghx-plan visible");
-                    injectScript('jira-modifications/signal-loading.js');
                     injectScript('jira-modifications/extra-planning-board.js');
                     planningScriptInjected = true;
                 }
