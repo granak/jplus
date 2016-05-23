@@ -26,9 +26,6 @@
             "js": [
                 "jquery-2.2.0.min.js",
                 "content.js"
-            ],
-            "css": [
-                "styles/signal.css"
             ]
         }
     ],
@@ -39,7 +36,6 @@
     },
     "web_accessible_resources": [
         "jira-modifications/extra-active-board.js",
-        "jira-modifications/extra-planning-board.js",
-        "jira-modifications/signal-loading.js"
+        "jira-modifications/extra-planning-board.js"
     ]
 }
