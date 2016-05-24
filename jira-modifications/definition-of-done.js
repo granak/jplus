@@ -11,14 +11,12 @@ targetNodes.each(function () {
 function mutationHandler(mutationRecords) {
     mutationRecords.forEach(function (mutation) {
         if (mutation.target.id === 'ghx-column-header-group') {
-            console.debug('Jira(+) --- column headers loaded');
             hoverPopovers();
         }
     });
 }
 
 function appendPopover(element, content) {
-    console.log(element);
     $(element).append($('<div class="plus-popover">' + content + '<div class="legend"><p>Legend:</p><ul><li class="mandatory">mandatory</li><li class="recommended">recommended</li></ul></div></div>'));
     $(element).hover(
         function () {

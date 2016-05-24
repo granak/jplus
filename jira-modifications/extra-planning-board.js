@@ -10,7 +10,6 @@ targetNodes.each(function () {
 });
 
 function mutationHandler(mutationRecords) {
-    //console.log("mutation");
     mutationRecords.forEach(function (mutation) {
         if (typeof mutation.attributes) {
             if (mutation.attributeName == "data-rendered") {
@@ -19,7 +18,6 @@ function mutationHandler(mutationRecords) {
         }
         if (typeof mutation.childList) {
             if (dataRendered && mutation.target.classList != undefined && mutation.target.classList.contains('ghx-issue-count')) {
-                //console.log("childlist mutation");
                 extraPlanning();
             }
         }
