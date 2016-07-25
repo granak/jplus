@@ -16,6 +16,7 @@ function mutationHandler(mutationRecords) {
 
 function extraBoard() {
     $('span.ghx-extra-field-content').addClass('aui-label');
+    $("span.ghx-extra-field-content:contains(None), span.ghx-extra-field-content:contains(none)").hide();    // hide none tags
     $("span.ghx-extra-field-content:contains(SWDCEktron)").css({
         "background-color": "rgb(142,176,33)",
         color: "rgb(255,255,255)"
@@ -40,7 +41,7 @@ function extraBoard() {
         "background-color": "rgb(228, 47, 38)",
         color: "rgb(255,255,255)"
     });
-    $("span.ghx-extra-field-content:contains(dream)").css({
+    $("span.ghx-extra-field-content:contains(dream), span.ghx-extra-field-content:contains(Dream)").css({
         "background-color": "rgba(2, 76, 222, 1)",
         color: "rgb(255,255,255)"
     });

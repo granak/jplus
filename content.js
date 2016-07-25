@@ -12,10 +12,13 @@ function getJiraMetaTag() {
 }
 
 if (getJiraMetaTag() == "JIRA") {
-    makeActiveBoardMutation();
+    makeBoardMutations();
+    if($('.issue-container')){
+        injectScript('jira-modifications/definition-of-ready.js');
+    }
 }
 
-function makeActiveBoardMutation() {
+function makeBoardMutations() {
     var targetNodes = [$('#ghx-work'), $('#ghx-plan')];
     var MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
     var myObserver = new MutationObserver(mutationHandler);
