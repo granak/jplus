@@ -1,0 +1,68 @@
+.jump-button {
+    border-radius: 3em;
+    background: rgba(255,255,255,.8);
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.5);
+    -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
+    min-height: 40px;
+    left: 4em;
+    margin: -15px 0 0 -15px;
+    opacity: .8;
+    position: absolute;
+    bottom: 1em;
+    min-width: 40px;
+    transition: all 0.6s ease;
+}
+
+.jump-button:hover {
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    background: rgba(255,255,255,1);
+    opacity: 1;
+}
+
+.jump-button p{
+    font-size: .8em;
+    position: relative;
+    left: 0.800em;
+    top: 0.950em;
+}
+.jump-button:hover p{
+    display: none;
+}
+
+.jump-button ul.jump-list {
+    display: none;
+}
+.jump-button:hover ul.jump-list {
+    display: block;
+    list-style: none;
+    padding: 0;
+    margin: 1em;
+}
+ul.jump-list li {
+    padding: 0 0.3em;
+    margin-bottom: 0.1em;
+    cursor: pointer;
+    border-radius: 3px;
+}
+ul.jump-list li.dream-team {
+    background: rgba(2, 76, 222, .8);
+    color: rgba(255,255,255,1);
+}
+ul.jump-list li.a-team {
+    background: rgba(20, 14, 0, .8);
+    color: rgba(255,255,255,1);
+}
+ul.jump-list li.prioritised {
+    background: rgba(228, 47, 38, .8);
+    color: rgba(255,255,255,1);
+}
+ul.jump-list li.reviewed {
+    background: rgba(63, 191, 63, .8);
+    color: rgba(255,255,255,1);
+}
+ul.jump-list li.backlog {
+    background: rgba(200, 200, 200, .8);
+}

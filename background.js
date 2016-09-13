@@ -78,7 +78,7 @@ function impedimentOnClick(info, tab) {
                 }
             },
             error: function (err) {
-                alert("Error. Jira(+) wasn't able to update 'Impediment' value. Please do it in standard way.");
+                alert("Error. Jira(+) wasn't able to update 'Impediment' value. Please try it again manually using Jira.");
                 console.log(err);
             }
         });
@@ -113,7 +113,7 @@ function updateJira(tab, info, url, updateObject) {
                 chrome.tabs.update(tab.id, { url: info.pageUrl });
             },
             error: function (err) {
-                alert("Error. Jira(+) wasn't able to update issue. Please do it in standard way.");
+                alert("Error. Jira(+) wasn't able to update issue. Please try it again manually using Jira.");
                 console.log(err);
             }
         });

@@ -19,6 +19,7 @@ function mutationHandler(mutationRecords) {
         if (typeof mutation.childList) {
             if (dataRendered && mutation.target.classList != undefined && mutation.target.classList.contains('ghx-issue-count')) {
                 extraPlanning();
+                $("#ghx-plan").trigger("extra-planning-applied");
             }
         }
     });

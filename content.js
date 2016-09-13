@@ -44,6 +44,7 @@ function makeBoardMutations() {
                     activeScriptInjected = true;
                 }
                 if (mutation.target.id === 'ghx-plan' && mutation.target.style.display !== 'none' && !planningScriptInjected) {
+                    injectScript('jira-modifications/quick-jump-navigation.js');
                     injectScript('jira-modifications/extra-planning-board.js');
                     planningScriptInjected = true;
                 }
