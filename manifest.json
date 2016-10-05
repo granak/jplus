@@ -1,10 +1,10 @@
 {
-    "name": "Jira(+)",
-    "description": "Additional Jira functionality and improvements",
-    "version": "1.4.10",
+    "name": "j+",
+    "description": "This extension provide additional functionality and improvements for Atlassian JIRA Project Management Software (v6.3.8+). For example: ability to add 'Definition of done' & 'Definition of ready', change styling for components in list of tickets etc.",
+    "version": "2.0.0",
     "manifest_version": 2,
     "page_action": {
-        "default_icon": "jira-icon.png",
+        "default_icon": "jira-icon.png", // TODO: Change icon
         "default_popup": "popup.html"
     },
     "permissions": [
@@ -39,6 +39,10 @@
         "16": "jira-icon.png",
         "48": "jira-icon.png",
         "128": "jira-icon.png"
+    },
+    "options_ui": {
+        "page":"options.html",
+        "chrome_style": true
     },
     "web_accessible_resources": [
         "jira-modifications/extra-active-board.js",
