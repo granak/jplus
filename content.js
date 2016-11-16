@@ -46,6 +46,7 @@ function makeBoardMutations() {
                 if (mutation.target.id === 'ghx-plan' && mutation.target.style.display !== 'none' && !planningScriptInjected) {
                     injectScript('jira-modifications/quick-jump-navigation.js');
                     injectScript('jira-modifications/extra-planning-board.js');
+                    injectScriptToBody('jira-modifications/backlog-right-click-extend.js');
                     planningScriptInjected = true;
                 }
             }
@@ -60,4 +61,12 @@ function injectScript(path) {
     script.setAttribute("src", chrome.extension.getURL(path));
     var head = document.head || document.getElementsByTagName("head")[0] || document.documentElement;
     head.insertBefore(script, head.lastChild)
+}
+function injectScriptToBody(path){
+    var script = document.createElement('script');
+    script.setAttribute("type", "text/javascript");
+    script.setAttribute("async", true);
+    script.setAttribute("src", chrome.extension.getURL(path));
+    var body = document.body || document.getElementsByTagName("body")[0];
+    body.insertBefore(script, body.lastChild)
 }
