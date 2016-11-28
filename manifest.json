@@ -1,11 +1,11 @@
 {
-    "name": "j+",
-    "description": "This extension provide additional functionality and improvements for Atlassian JIRA Project Management Software (v6.3.8+). For example: ability to add 'Definition of done' & 'Definition of ready', change styling for components in list of tickets etc.",
+    "name": "jPlus beta",
+    "description": "Additional functionality and improvements for your Atlassian JIRA Project Management Software (v6.3.8+).",
     "version": "2.0.0",
     "manifest_version": 2,
     "page_action": {
         "default_icon": "jira-icon.png", // TODO: Change icon
-        "default_popup": "popup.html"
+        "default_popup": "popup.html"   // TODO: Change popup as well
     },
     "permissions": [
         "declarativeContent",
@@ -15,7 +15,7 @@
     ],
     "background": {
         "scripts": [
-            "jquery-2.2.0.min.js",
+            "jquery-3.1.1.min.js",
             "background.js"
         ]
     },
@@ -26,7 +26,7 @@
                 "https://*/*"
             ],
             "js": [
-                "jquery-2.2.0.min.js",
+                "jquery-3.1.1.min.js",
                 "content.js"
             ],
             "css": [
