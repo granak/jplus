@@ -15,7 +15,7 @@
     ],
     "background": {
         "scripts": [
-            "jquery-3.1.1.min.js",
+            "scripts/jquery-3.1.1.min.js",
             "background.js"
         ]
     },
@@ -26,7 +26,7 @@
                 "https://*/*"
             ],
             "js": [
-                "jquery-3.1.1.min.js",
+                "scripts/jquery-3.1.1.min.js",
                 "content.js"
             ],
             "css": [

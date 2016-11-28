@@ -1,12 +1,111 @@
+<!DOCTYPE html>
 <html>
 
 <head>
-    <title>j+</title>
-    <script src="jquery-2.2.0.min.js"></script>
+    <title>jPlus Options</title>
+    <script src="scripts/jquery-3.1.1.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="styles/paper-bootstrap.min.css" />
+    <link type="text/css" rel="stylesheet" href="styles/material-switch.css" />
+    <link type="text/css" rel="stylesheet" href="styles/options.css" />
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="scripts/bootstrap.min.js"></script>
 </head>
 
 <body>
-    <script src="options.js"></script>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12">
+                <div id="success-message-area" class="alert alert-success" role="alert"></div>
+                <div id="warning-message-area" class="alert alert-warning" role="alert"></div>
+                <div id="error-message-area" class="alert alert-danger" role="alert"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <ul class="nav nav-tabs" role="navigation">
+                    <li role="main-window" class="active"><a href="#main-configuration" data-toggle="tab">Settings</a></li>
+                    <li role="main-window"><a href="#customization" data-toggle="tab">Customization</a></li>
+                    <li role="main-window"><a href="#about" data-toggle="tab">Aboout</a></li>
+                </ul>
+                <div id="main-window" class="tab-content">
+                    <div class="tab-pane fade active in" id="main-configuration">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Connection</div>
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label class="control-label" for="jira-url">Jira URL</label>
+                                    <input class="form-control input-sm" id="jira-url" type="text">
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label" for="settings-url">Settings URL</label>
+                                    <input class="form-control input-sm" id="settings-url" type="text" disabled>
+                                    <span class="help-block">Provide URL to get your company settings file.</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Extensions</div>
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    Extra styling for tickets
+                                    <div class="material-switch pull-right">
+                                        <input id="extraStylingSwitchOption" name="extraStylingSwitchOption" type="checkbox" />
+                                        <label for="extraStylingSwitchOption" class="label-primary"></label>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    Definition of Done
+                                    <div class="material-switch pull-right">
+                                        <input id="dodSwitchOption" name="dodSwitchOption" type="checkbox" />
+                                        <label for="dodSwitchOption" class="label-primary"></label>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    Definition of Ready
+                                    <div class="material-switch pull-right">
+                                        <input id="dorSwitchOption" name="dorSwitchOption" type="checkbox" />
+                                        <label for="dorSwitchOption" class="label-primary"></label>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    Right click actions
+                                    <div class="material-switch pull-right">
+                                        <input id="rightClickSwitchOption" name="rightClickSwitchOption" type="checkbox" />
+                                        <label for="rightClickSwitchOption" class="label-primary"></label>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    Quick jump navigation for backlog
+                                    <div class="material-switch pull-right">
+                                        <input id="quickJumpSwitchOption" name="quickJumpSwitchOption" type="checkbox" />
+                                        <label for="quickJumpSwitchOption" class="label-primary"></label>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="customization">
+                        <p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation
+                            +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table
+                            craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts
+                            ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus
+                            mollit.
+                        </p>
+                    </div>
+                    <div class="tab-pane fade" id="about">
+                        <p>Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro
+                            fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer,
+                            iphone skateboard locavore carles etsy salvia banksy hoodie helvetica. DIY synth PBR banksy irony.
+                            Leggings gentrify squid 8-bit cred pitchfork.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script src="scripts/options.js"></script>
 </body>
 
 </html>
