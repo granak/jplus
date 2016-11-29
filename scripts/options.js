@@ -6,6 +6,11 @@ var defintionOfReady;
 var rightClickActions;
 var quickJump;
 
+var es_stylingData = [];
+var es_backgroundColor;
+var es_fontColor;
+var es_selectedStyling;
+
 function showSuccess(message) {
     var timeout = 750;
     showAlert('success-message-area', message, timeout);
@@ -97,9 +102,37 @@ function toggleCustomizationPanel(element, property) {
     }
 }
 
+function initColorPickers() {
+    $('#es-styling-background-color-picker').colorpicker({
+        format: 'rgba'
+    });
+    $('#es-styling-font-color-picker').colorpicker({
+        format: 'rgba'
+    });
+    $('#es-styling-background-color-picker').on('changeColor', function(event) { 
+        es_backgroundColor = event.color.toRGB();
+    });
+    $('#es-styling-font-color-picker').on('changeColor', function(event) {
+        es_fontColor = event.color.toRGB();
+    });
+}
+
+function generateStylesTable(dataRows) {
+    $('#es-table>tbody').empty();
+
+    $.each(dataRows, function(index, value) { 
+        $('#es-table>tbody').append( '<tr data-id="'+ value.id +'">' +
+            '<td>' + value.name + '</td>' +
+            '<td>' + value.backroundColor + '</td>' +
+            '<td>' + value.fontColor + '</td>' + 
+        '</tr>' );
+    })
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     restoreLocalOptions();
     toggleCustomizationPanels();
+    initColorPickers();
 });
 
 // On checkbox stat changed
@@ -115,3 +148,35 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
         toggleCustomizationPanels();
     }
 });
+
+// Styling
+$('#es-table>tbody').on('click', 'tr', function(event) {
+    $('#es-update-styling').show();
+    var row = $(this);
+    es_selectedStyling = {
+        id: row.attr('data-id'),
+        name: $(row.children()[0]).text(),
+        backroundColor: $(row.children()[1]).text(),
+        fontColor: $(row.children()[2]).text()
+    }
+});
+$('#es-add-styling').on('click', function() {
+    var name = $('#es-styling-input').val();
+    if(!!name && name.length > 0 && !!es_backgroundColor && !!es_fontColor) {
+        var styling = {
+            id: es_stylingData.length + 1, 
+            name: name, 
+            backroundColor: 'rgba(' + es_backgroundColor.r + ',' + es_backgroundColor.g + ',' + es_backgroundColor.b + ',' + es_backgroundColor.a +')', 
+            fontColor: 'rgba(' + es_fontColor.r + ',' + es_fontColor.g + ',' + es_fontColor.b + ',' + es_fontColor.a +')'
+        }
+        es_stylingData.push(styling);
+    }
+    generateStylesTable(es_stylingData);
+    $('#es-update-styling').hide();
+});
+
+$('#es-update-styling').on('click', function() {
+    
+
+    $('#es-update-styling').hide();
+})

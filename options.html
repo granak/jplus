@@ -5,9 +5,11 @@
     <title>jPlus Options</title>
     <script src="scripts/jquery-3.1.1.min.js"></script>
     <link type="text/css" rel="stylesheet" href="styles/paper-bootstrap.min.css" />
+    <link type="text/css" rel="stylesheet" href="styles/bootstrap-colorpicker.min.css" />
     <link type="text/css" rel="stylesheet" href="styles/material-switch.css" />
     <link type="text/css" rel="stylesheet" href="styles/options.css" />
     <script src="scripts/bootstrap.min.js"></script>
+    <script src="scripts/bootstrap-colorpicker.min.js"></script>
 </head>
 
 <body>
@@ -92,15 +94,31 @@
                                 <form class="form">
                                     <div class="form-group">
                                         <label for="es-styling-input">Name</label>
-                                        <input type="text" class="form-control" id="es-styling-input">                                        
+                                        <input type="text" class="form-control" id="es-styling-input">
                                         <span class="help-block">Add word which will be colored by selected color.</span>
                                     </div>
+                                    <div class="form-group">
+                                        <label for="es-styling-background-color-picker">Background Color</label>
+                                        <input id="es-styling-background-color-picker" type="text" class="form-control" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="es-styling-font-color-picker">Font Color</label>
+                                        <input id="es-styling-font-color-picker" type="text" class="form-control" />
+                                    </div>
 
-                                    <a id="es-add-styling-submit" type="submit" class="btn btn-primary">Add Condition</a>
+                                    <a id="es-add-styling" class="btn btn-sm btn-primary">Add Styling</a>
+                                    <a id="es-update-styling" class="btn btn-sm btn-default">Update</a>
                                 </form>
                             </div>
-                            <table class="table">
-
+                            <table id="es-table" class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Background color</th>
+                                        <th>Font color</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
                             </table>
                         </div>
                         <div id="definition-of-done-panel" class="panel panel-default">
