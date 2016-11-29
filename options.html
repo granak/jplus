@@ -7,20 +7,11 @@
     <link type="text/css" rel="stylesheet" href="styles/paper-bootstrap.min.css" />
     <link type="text/css" rel="stylesheet" href="styles/material-switch.css" />
     <link type="text/css" rel="stylesheet" href="styles/options.css" />
-    <!-- Latest compiled and minified JavaScript -->
     <script src="scripts/bootstrap.min.js"></script>
 </head>
 
 <body>
-
     <div class="container-fluid">
-        <div class="row">
-            <div class="col-xs-12">
-                <div id="success-message-area" class="alert alert-success" role="alert"></div>
-                <div id="warning-message-area" class="alert alert-warning" role="alert"></div>
-                <div id="error-message-area" class="alert alert-danger" role="alert"></div>
-            </div>
-        </div>
         <div class="row">
             <div class="col-xs-12">
                 <ul class="nav nav-tabs" role="navigation">
@@ -35,7 +26,7 @@
                             <div class="panel-body">
                                 <div class="form-group">
                                     <label class="control-label" for="jira-url">Jira URL</label>
-                                    <input class="form-control input-sm" id="jira-url" type="text">
+                                    <input class="form-control input-sm" id="jira-url" type="text" placeholder="https://jira.your-company.com">
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label" for="settings-url">Settings URL</label>
@@ -86,12 +77,56 @@
                         </div>
                     </div>
                     <div class="tab-pane fade" id="customization">
-                        <p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation
-                            +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table
-                            craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts
-                            ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus
-                            mollit.
-                        </p>
+                        <div id="extra-styling-panel" class="panel panel-default">
+                            <div class="panel-heading">Extra Styling</div>
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    Hide "None" extra fields
+                                    <div class="material-switch pull-right">
+                                        <input id="es-hide-none-switch" name="es-hide-none-switch" type="checkbox" />
+                                        <label for="es-hide-none-switch" class="label-primary"></label>
+                                    </div>
+                                </li>
+                            </ul>
+                            <div class="panel-body">
+                                <form class="form">
+                                    <div class="form-group">
+                                        <label for="es-styling-input">Name</label>
+                                        <input type="text" class="form-control" id="es-styling-input">                                        
+                                        <span class="help-block">Add word which will be colored by selected color.</span>
+                                    </div>
+
+                                    <a id="es-add-styling-submit" type="submit" class="btn btn-primary">Add Condition</a>
+                                </form>
+                            </div>
+                            <table class="table">
+
+                            </table>
+                        </div>
+                        <div id="definition-of-done-panel" class="panel panel-default">
+                            <div class="panel-heading">Definition of Done</div>
+                            <div class="panel-body">
+                                Basic panel example
+                            </div>
+                        </div>
+                        <div id="definition-of-ready-panel" class="panel panel-default">
+                            <div class="panel-heading">Definition of Ready</div>
+                            <div class="panel-body">
+                                Basic panel example
+                            </div>
+                        </div>
+                        <div id="right-click-actions-panel" class="panel panel-default">
+                            <div class="panel-heading">Right Click Actions</div>
+                            <div class="panel-body">
+                                Basic panel example
+                            </div>
+                        </div>
+                        <div id="quick-jump-panel" class="panel panel-default">
+                            <div class="panel-heading">Quick Jump Actions</div>
+                            <div class="panel-body">
+                                Basic panel example
+                            </div>
+                        </div>
                     </div>
                     <div class="tab-pane fade" id="about">
                         <p>Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro
@@ -103,8 +138,18 @@
                 </div>
             </div>
         </div>
-
     </div>
+    <footer class="sticky-footer">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    <span id="success-message-area" class="label label-success"></span>
+                    <span id="warning-message-area" class="label label-warning"></span>
+                    <span id="error-message-area" class="label label-danger"></span>
+                </div>
+            </div>
+        </div>
+    </footer>
     <script src="scripts/options.js"></script>
 </body>
 

@@ -1,3 +1,33 @@
+var jiraUrl = '';
+var jPlusSettingsUrl = '';
+var extraStyling;
+var defintionOfDone;
+var defintionOfReady;
+var rightClickActions;
+var quickJump;
+
+function showSuccess(message) {
+    var timeout = 750;
+    showAlert('success-message-area', message, timeout);
+}
+function showWarning(message) {
+    var timeout = 2000;
+    showAlert('warning-message-area', message, timeout);
+}
+function showError(message) {
+    var timeout = 5000;
+    showAlert('error-message-area', message, timeout);
+}
+
+function showAlert(id, message, timeout) {
+    var messageArea = $('#' + id);
+    messageArea.text(message);
+    messageArea.fadeIn();
+    setTimeout(function () {
+        messageArea.fadeOut();
+    }, timeout);
+}
+
 function restoreLocalOptions() {
     chrome.storage.sync.get({
         jiraUrl: '',
@@ -8,13 +38,21 @@ function restoreLocalOptions() {
         rightClickActions: true,
         quickJump: true
     }, function (items) {
-        $('#jira-url').val(items.jiraUrl);
-        $('#settings-url').val(items.jPlusSettingsUrl);
-        $('#extraStylingSwitchOption').prop('checked', items.extraStyling);
-        $('#dodSwitchOption').prop('checked', items.defintionOfDone);
-        $('#dorSwitchOption').prop('checked', items.defintionOfReady);
-        $('#rightClickSwitchOption').prop('checked', items.rightClickActions);
-        $('#quickJumpSwitchOption').prop('checked', items.quickJump);
+        jiraUrl = items.jiraUrl;
+        jPlusSettingsUrl = items.jPlusSettingsUrl;
+        extraStyling = items.extraStyling;
+        defintionOfDone = items.defintionOfDone;
+        defintionOfReady = items.defintionOfReady;
+        rightClickActions = items.rightClickActions;
+        quickJump = items.quickJump;
+
+        $('#jira-url').val(jiraUrl);
+        $('#settings-url').val(jPlusSettingsUrl);
+        $('#extraStylingSwitchOption').prop('checked', extraStyling);
+        $('#dodSwitchOption').prop('checked', defintionOfDone);
+        $('#dorSwitchOption').prop('checked', defintionOfReady);
+        $('#rightClickSwitchOption').prop('checked', rightClickActions);
+        $('#quickJumpSwitchOption').prop('checked', quickJump);
     });
 }
 
@@ -23,26 +61,57 @@ function restoreRemoteOptions() {
 }
 
 function saveLocalOptions() {
+    jiraUrl = $('#jira-url').val();
+    jPlusSettingsUrl = $('#settings-url').val();
+    extraStyling = $('#extraStylingSwitchOption').prop('checked');
+    defintionOfDone = $('#dodSwitchOption').prop('checked');
+    defintionOfReady = $('#dorSwitchOption').prop('checked');
+    rightClickActions = $('#rightClickSwitchOption').prop('checked');
+    quickJump = $('#quickJumpSwitchOption').prop('checked');
+
     chrome.storage.sync.set({
-        jiraUrl: $('#jira-url').val(),
-        jPlusSettingsUrl: $('#settings-url').val(),
-        extraStyling: $('#extraStylingSwitchOption').prop('checked'),
-        defintionOfDone: $('#dodSwitchOption').prop('checked'),
-        defintionOfReady: $('#dorSwitchOption').prop('checked'),
-        rightClickActions: $('#rightClickSwitchOption').prop('checked'),
-        quickJump: $('#quickJumpSwitchOption').prop('checked')
+        jiraUrl: jiraUrl,
+        jPlusSettingsUrl: jPlusSettingsUrl,
+        extraStyling: extraStyling,
+        defintionOfDone: defintionOfDone,
+        defintionOfReady: defintionOfReady,
+        rightClickActions: rightClickActions,
+        quickJump: quickJump
     }, function () {
-        // Update status to let user know options were saved.
-        var status = document.getElementById('status');
-        status.textContent = 'Options saved.';
-        setTimeout(function () {
-            status.textContent = '';
-        }, 750);
+        showSuccess('Saved');
     });
 }
 
-document.addEventListener('DOMContentLoaded', restoreLocalOptions);
+function toggleCustomizationPanels() {
+    toggleCustomizationPanel($('#extra-styling-panel'), extraStyling);
+    toggleCustomizationPanel($('#definition-of-done-panel'), defintionOfDone);
+    toggleCustomizationPanel($('#definition-of-ready-panel'), defintionOfReady);
+    toggleCustomizationPanel($('#right-click-actions-panel'), rightClickActions);
+    toggleCustomizationPanel($('#quick-jump-panel'), quickJump);
+}
+function toggleCustomizationPanel(element, property) {
+    if (property === true) {
+        element.show();
+    } else {
+        element.hide();
+    }
+}
 
+document.addEventListener('DOMContentLoaded', function () {
+    restoreLocalOptions();
+    toggleCustomizationPanels();
+});
+
+// On checkbox stat changed
 $('input[type="checkbox"]').on('change', function (e) {
     saveLocalOptions();
+});
+
+// On tab changed
+$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+    var target = $(e.target).attr("href");
+    if (target === '#customization') {
+        restoreLocalOptions();
+        toggleCustomizationPanels();
+    }
 });
