@@ -43,7 +43,7 @@ function updateStylingData(value) {
 }
 
 function saveStyles() {
-    chrom.storage.sync.set({
+    chrome.storage.sync.set({
         extraStylingData: data
     }, function () {
         showSuccess('Saved');
