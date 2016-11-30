@@ -59,6 +59,9 @@ $(document).on('optionsLoaded', function (event, inputData) {
     if(data.stylingData.length < 1){
         $('#es-table').hide();
     }
+    else {
+        generateStylesTable(data.stylingData);
+    }
 });
 
 // Styling events
