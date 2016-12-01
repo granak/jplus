@@ -7,6 +7,7 @@ var rightClickActions;
 var quickJump;
 
 var extraStylingData;
+var definitionOfReadyData;
 
 function showSuccess(message) {
     var timeout = 750;
@@ -39,7 +40,8 @@ function restoreLocalOptions() {
         defintionOfReady: true,
         rightClickActions: true,
         quickJump: true,
-        extraStylingData: { hideNoneItems: true, stylingData: []}
+        extraStylingData: { hideNoneItems: true, stylingData: []},
+        definitionOfReadyData: ''
     }, function (items) {
         jiraUrl = items.jiraUrl;
         jPlusSettingsUrl = items.jPlusSettingsUrl;
@@ -50,6 +52,7 @@ function restoreLocalOptions() {
         quickJump = items.quickJump;
 
         extraStylingData = items.extraStylingData;
+        definitionOfReadyData = items.definitionOfReadyData;        
 
         $('#jira-url').val(jiraUrl);
         $('#settings-url').val(jPlusSettingsUrl);
@@ -60,7 +63,11 @@ function restoreLocalOptions() {
         $('#quickJumpSwitchOption').prop('checked', quickJump);
 
         toggleCustomizationPanels();
-        $(document).trigger('optionsLoaded', extraStylingData);
+        var savedData = {
+            styling: extraStylingData,
+            definitionOfReady: definitionOfReadyData
+        }
+        $(document).trigger('optionsLoaded', savedData);
     });
 }
 

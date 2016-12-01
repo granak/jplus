@@ -53,7 +53,7 @@ function saveStyles() {
 // Saved Options loaded
 $(document).on('optionsLoaded', function (event, inputData) {
     initColorPickers();
-    data = inputData;
+    data = inputData.styling;
     $('#es-hide-none-switch').prop('checked', data.hideNoneItems);
     
     if(data.stylingData.length < 1){
@@ -86,7 +86,7 @@ $('#es-table>tbody').on('click', 'tr', function (event) {
 });
 $('#es-add-styling').on('click', function () {
     var name = $('#es-styling-input').val();
-    if (!!name && name.length > 0 && !!es_backgroundColor && !!es_fontColor) {
+    if (name && name.length > 0 && es_backgroundColor && es_fontColor) {
         var styling = {
             id: data.stylingData.length + 1,
             name: name,
@@ -101,7 +101,7 @@ $('#es-add-styling').on('click', function () {
 });
 $('#es-update-styling').on('click', function () {
     var name = $('#es-styling-input').val();
-    if (!!name && name.length > 0 && !!es_backgroundColor && !!es_fontColor) {
+    if (name && name.length > 0 && es_backgroundColor && es_fontColor) {
         es_selectedStyling.name = name;
         es_selectedStyling.backroundColor = 'rgba(' + es_backgroundColor.r + ',' + es_backgroundColor.g + ',' + es_backgroundColor.b + ',' + es_backgroundColor.a + ')';
         es_selectedStyling.fontColor = 'rgba(' + es_fontColor.r + ',' + es_fontColor.g + ',' + es_fontColor.b + ',' + es_fontColor.a + ')'
