@@ -99,15 +99,17 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="es-styling-background-color-picker">Background Color</label>
-                                        <input id="es-styling-background-color-picker" type="text" class="form-control" />
+                                        <input id="es-styling-background-color-picker" type="text" class="form-control input-sm" />
                                     </div>
                                     <div class="form-group">
                                         <label for="es-styling-font-color-picker">Font Color</label>
-                                        <input id="es-styling-font-color-picker" type="text" class="form-control" />
+                                        <input id="es-styling-font-color-picker" type="text" class="form-control input-sm" />
                                     </div>
 
-                                    <a id="es-add-styling" class="btn btn-sm btn-primary">Add Styling</a>
-                                    <a id="es-update-styling" class="btn btn-sm btn-default">Update</a>
+                                    <div class="form-group pull-right">
+                                        <a id="es-add-styling" class="btn btn-sm btn-primary">Add Styling</a>
+                                        <a id="es-update-styling" class="btn btn-sm btn-default">Update</a>
+                                    </div>
                                 </form>
                             </div>
                             <table id="es-table" class="table table-hover">
@@ -135,7 +137,7 @@
                                         <label for="dor-text">Text</label>
                                         <textarea id="dor-text" type="text" rows="6" class="form-control input-sm"></textarea>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group pull-right">
                                         <a id="dor-submit" type="submit" class="btn btn-sm btn-primary">Save</a>
                                     </div>
                                 </form>
@@ -161,10 +163,39 @@
                             </ul>
                         </div>
                         <div id="quick-jump-panel" class="panel panel-default">
-                            <div class="panel-heading">Quick Jump Actions</div>
+                            <div class="panel-heading">Quick Jump Navigation</div>
                             <div class="panel-body">
-                                Basic panel example
+                                <form class="form">
+                                    <div class="form-group">
+                                        <label for="qj-styling-input">Container name</label>
+                                        <input type="text" class="form-control" id="qj-styling-input">
+                                        <span class="help-block">Add container name (or its part to match) which will be styled by defined colors.</span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="qj-styling-background-color-picker">Background Color</label>
+                                        <input id="qj-styling-background-color-picker" type="text" class="form-control input-sm" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="qj-styling-font-color-picker">Font Color</label>
+                                        <input id="qj-styling-font-color-picker" type="text" class="form-control input-sm" />
+                                    </div>
+
+                                    <div class="form-group pull-right">
+                                        <a id="qj-add-styling" class="btn btn-sm btn-primary">Add Styling</a>
+                                        <a id="qj-update-styling" class="btn btn-sm btn-default">Update</a>
+                                    </div>
+                                </form>
                             </div>
+                            <table id="qj-table" class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Background color</th>
+                                        <th>Font color</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
                         </div>
                     </div>
                     <div class="tab-pane fade" id="about">
@@ -194,6 +225,7 @@
     <script src="scripts/options/extended-styling.js"></script>
     <script src="scripts/options/definition-of-ready.js"></script>
     <script src="scripts/options/right-click.js"></script>
+    <script src="scripts/options/quick-jump-navigation.js"></script>
 </body>
 
 </html>

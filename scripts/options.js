@@ -9,6 +9,7 @@ var quickJump;
 var extraStylingData;
 var definitionOfReadyData;
 var rightClickActionsData;
+var quickJumpData;
 
 function showSuccess(message) {
     var timeout = 750;
@@ -43,7 +44,8 @@ function restoreLocalOptions() {
         quickJump: true,
         extraStylingData: { hideNoneItems: true, stylingData: [] },
         definitionOfReadyData: '',
-        rightClickActionsData: { showBrowserContextMenu: true, extendJiraContextMenu: true }
+        rightClickActionsData: { showBrowserContextMenu: true, extendJiraContextMenu: true },
+        quickJumpData: { stylingData: [] }
     }, function (items) {
         jiraUrl = items.jiraUrl;
         jPlusSettingsUrl = items.jPlusSettingsUrl;
@@ -56,6 +58,7 @@ function restoreLocalOptions() {
         extraStylingData = items.extraStylingData;
         definitionOfReadyData = items.definitionOfReadyData;
         rightClickActionsData = items.rightClickActionsData;
+        quickJumpData = items.quickJumpData;
 
         $('#jira-url').val(jiraUrl);
         $('#settings-url').val(jPlusSettingsUrl);
@@ -69,7 +72,8 @@ function restoreLocalOptions() {
         var savedData = {
             styling: extraStylingData,
             definitionOfReady: definitionOfReadyData,
-            rightClickActions: rightClickActionsData
+            rightClickActions: rightClickActionsData,
+            quickJump: quickJumpData
         }
         $(document).trigger('optionsLoaded', savedData);
     });
