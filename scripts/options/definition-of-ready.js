@@ -1,6 +1,4 @@
-var data;
-
-function save() {
+function saveDefinitionOfReadyData(data) {
     chrome.storage.sync.set({
         definitionOfReadyData: data
     }, function () {
@@ -10,14 +8,11 @@ function save() {
 
 // Saved Options loaded
 $(document).on('optionsLoaded', function (event, inputData) {
-    data = inputData.definitionOfReady;
-
-    if (!!data) {
-        $('#dor-text').val(data);
+    if (inputData.definitionOfReady) {
+        $('#dor-text').val(inputData.definitionOfReady);
     }
 });
 
 $('#dor-submit').on('click', function () {
-    data = $('#dor-text').val();
-    save();
+    saveDefinitionOfReadyData($('#dor-text').val());
 })

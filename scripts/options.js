@@ -8,6 +8,7 @@ var quickJump;
 
 var extraStylingData;
 var definitionOfReadyData;
+var rightClickActionsData;
 
 function showSuccess(message) {
     var timeout = 750;
@@ -40,8 +41,9 @@ function restoreLocalOptions() {
         defintionOfReady: true,
         rightClickActions: true,
         quickJump: true,
-        extraStylingData: { hideNoneItems: true, stylingData: []},
-        definitionOfReadyData: ''
+        extraStylingData: { hideNoneItems: true, stylingData: [] },
+        definitionOfReadyData: '',
+        rightClickActionsData: { showBrowserContextMenu: true, extendJiraContextMenu: true }
     }, function (items) {
         jiraUrl = items.jiraUrl;
         jPlusSettingsUrl = items.jPlusSettingsUrl;
@@ -52,7 +54,8 @@ function restoreLocalOptions() {
         quickJump = items.quickJump;
 
         extraStylingData = items.extraStylingData;
-        definitionOfReadyData = items.definitionOfReadyData;        
+        definitionOfReadyData = items.definitionOfReadyData;
+        rightClickActionsData = items.rightClickActionsData;
 
         $('#jira-url').val(jiraUrl);
         $('#settings-url').val(jPlusSettingsUrl);
@@ -65,7 +68,8 @@ function restoreLocalOptions() {
         toggleCustomizationPanels();
         var savedData = {
             styling: extraStylingData,
-            definitionOfReady: definitionOfReadyData
+            definitionOfReady: definitionOfReadyData,
+            rightClickActions: rightClickActionsData
         }
         $(document).trigger('optionsLoaded', savedData);
     });
@@ -73,8 +77,8 @@ function restoreLocalOptions() {
 
 function restoreRemoteOptions() {
 
-        toggleCustomizationPanels();
-        $(document).trigger('optionsLoaded');
+    toggleCustomizationPanels();
+    $(document).trigger('optionsLoaded');
 }
 
 function saveLocalOptions() {
@@ -96,6 +100,15 @@ function saveLocalOptions() {
         quickJump: quickJump
     }, function () {
         showSuccess('Saved');
+    });
+}
+
+function clearStorage() {
+    chrome.storage.sync.clear(function () {
+        var error = chrome.runtime.lastError;
+        if (error) {
+            console.error(error);
+        }
     });
 }
 

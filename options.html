@@ -143,9 +143,22 @@
                         </div>
                         <div id="right-click-actions-panel" class="panel panel-default">
                             <div class="panel-heading">Right Click Actions</div>
-                            <div class="panel-body">
-                                Basic panel example
-                            </div>
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    Add browser context menu
+                                    <div class="material-switch pull-right">
+                                        <input id="rc-browser-context-menu" name="rc-browser-context-menu" type="checkbox" />
+                                        <label for="rc-browser-context-menu" class="label-primary"></label>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    Extend Jira® context menu
+                                    <div class="material-switch pull-right">
+                                        <input id="rc-jira-context-menu" name="rc-jira-context-menu" type="checkbox" />
+                                        <label for="rc-jira-context-menu" class="label-primary"></label>
+                                    </div>
+                                </li>
+                            </ul>
                         </div>
                         <div id="quick-jump-panel" class="panel panel-default">
                             <div class="panel-heading">Quick Jump Actions</div>
@@ -180,6 +193,7 @@
     <script src="scripts/options.js"></script>
     <script src="scripts/options/extended-styling.js"></script>
     <script src="scripts/options/definition-of-ready.js"></script>
+    <script src="scripts/options/right-click.js"></script>
 </body>
 
 </html>
