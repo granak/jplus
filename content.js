@@ -12,10 +12,58 @@ function getJiraMetaTag() {
 }
 
 if (getJiraMetaTag() == "JIRA") {
+    getSavedOptions();
     makeBoardMutations();
-    if($('.issue-container')){
+    if ($('.issue-container')) {
         injectScript('jira-modifications/definition-of-ready.js');
     }
+}
+
+function getSavedOptions() {
+    chrome.storage.sync.get({
+        jiraUrl: '',
+        jPlusSettingsUrl: '',
+        extraStyling: true,
+        defintionOfDone: true,
+        defintionOfReady: true,
+        rightClickActions: true,
+        quickJump: true,
+        extraStylingData: { hideNoneItems: true, stylingData: [] },
+        definitionOfReadyData: '',
+        rightClickActionsData: { showBrowserContextMenu: true, extendJiraContextMenu: true },
+        quickJumpData: { stylingData: [] }
+    }, function (items) {
+        console.log(items);
+        // jiraUrl = items.jiraUrl;
+        // jPlusSettingsUrl = items.jPlusSettingsUrl;
+        // extraStyling = items.extraStyling;
+        // defintionOfDone = items.defintionOfDone;
+        // defintionOfReady = items.defintionOfReady;
+        // rightClickActions = items.rightClickActions;
+        // quickJump = items.quickJump;
+
+        // extraStylingData = items.extraStylingData;
+        // definitionOfReadyData = items.definitionOfReadyData;
+        // rightClickActionsData = items.rightClickActionsData;
+        // quickJumpData = items.quickJumpData;
+
+        // $('#jira-url').val(jiraUrl);
+        // $('#settings-url').val(jPlusSettingsUrl);
+        // $('#extraStylingSwitchOption').prop('checked', extraStyling);
+        // $('#dodSwitchOption').prop('checked', defintionOfDone);
+        // $('#dorSwitchOption').prop('checked', defintionOfReady);
+        // $('#rightClickSwitchOption').prop('checked', rightClickActions);
+        // $('#quickJumpSwitchOption').prop('checked', quickJump);
+
+        // toggleCustomizationPanels();
+        // var savedData = {
+        //     styling: extraStylingData,
+        //     definitionOfReady: definitionOfReadyData,
+        //     rightClickActions: rightClickActionsData,
+        //     quickJump: quickJumpData
+        // }
+        // $(document).trigger('optionsLoaded', savedData);
+    });
 }
 
 function makeBoardMutations() {
@@ -62,7 +110,7 @@ function injectScript(path) {
     var head = document.head || document.getElementsByTagName("head")[0] || document.documentElement;
     head.insertBefore(script, head.lastChild)
 }
-function injectScriptToBody(path){
+function injectScriptToBody(path) {
     var script = document.createElement('script');
     script.setAttribute("type", "text/javascript");
     script.setAttribute("async", true);
