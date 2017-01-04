@@ -1,4 +1,4 @@
-var data;
+var es_data;
 
 var es_backgroundColor;
 var es_fontColor;
@@ -19,54 +19,63 @@ function initColorPickers() {
     });
 }
 
-function generateStylesTable(dataRows) {
-    $('#es-table').show();
-    $('#es-table>tbody').empty();
+function generateStylesTable(rows) {
+    if (rows != undefined && rows.length != undefined && rows.length > 0) {
+        $('#es-table').show();
+        $('#es-table>tbody').empty();
 
-    $.each(dataRows, function (index, value) {
-        $('#es-table>tbody').append('<tr data-id="' + value.id + '">' +
-            '<td>' + value.name + '</td>' +
-            '<td>' + value.backroundColor + '</td>' +
-            '<td>' + value.fontColor + '</td>' +
-            '</tr>');
-    })
+        $.each(rows, function (index, value) {
+            $('#es-table>tbody').append('<tr data-id="' + value.id + '">' +
+                '<td>' + value.name + '</td>' +
+                '<td>' + value.backroundColor + '</td>' +
+                '<td>' + value.fontColor + '</td>' +
+                '</tr>');
+        })
+    }
 }
 
 function updateStylingData(value) {
-    $.each(data.stylingData, function (index, item) {
+    $.each(es_data.stylingData, function (index, item) {
         if (item.id == value.id) {
-            data.stylingData[index] = value;
+            es_data.stylingData[index] = value;
         }
     });
 
-    generateStylesTable(data.stylingData);    //regenerate table
+    generateStylesTable(es_data.stylingData);    //regenerate table
+}
+
+function clearFormInputFields() {
+    $('#es-styling-input').val('');
+    $('#es-styling-background-color-picker').colorpicker('setValue', '');
+    $('#es-styling-font-color-picker').colorpicker('setValue', '');
 }
 
 function saveStyles() {
     chrome.storage.sync.set({
-        extraStylingData: data
+        extraStylingData: es_data
     }, function () {
         showSuccess('Saved');
+        clearFormInputFields();
     });
 }
 
 // Saved Options loaded
 $(document).on('optionsLoaded', function (event, inputData) {
     initColorPickers();
-    data = inputData;
-    $('#es-hide-none-switch').prop('checked', data.hideNoneItems);
-    
-    if(data.stylingData.length < 1){
+    es_data = inputData.styling;
+    $('#es-hide-none-switch').prop('checked', es_data.hideNoneItems);
+
+    if (es_data.stylingData.length < 1) {
         $('#es-table').hide();
     }
     else {
-        generateStylesTable(data.stylingData);
+        generateStylesTable(es_data.stylingData);
     }
 });
 
 // Styling events
 $('#es-hide-none-switch').on('change', function (e) {
-    data.hideNoneItems = $('#es-hide-none-switch').prop('checked');
+    es_data.hideNoneItems = $('#es-hide-none-switch').prop('checked');
     saveStyles();
 });
 
@@ -86,27 +95,29 @@ $('#es-table>tbody').on('click', 'tr', function (event) {
 });
 $('#es-add-styling').on('click', function () {
     var name = $('#es-styling-input').val();
-    if (!!name && name.length > 0 && !!es_backgroundColor && !!es_fontColor) {
+    if (name && name.length > 0 && es_backgroundColor && es_fontColor) {
         var styling = {
-            id: data.stylingData.length + 1,
+            id: es_data.stylingData.length + 1,
             name: name,
             backroundColor: 'rgba(' + es_backgroundColor.r + ',' + es_backgroundColor.g + ',' + es_backgroundColor.b + ',' + es_backgroundColor.a + ')',
             fontColor: 'rgba(' + es_fontColor.r + ',' + es_fontColor.g + ',' + es_fontColor.b + ',' + es_fontColor.a + ')'
         }
-        data.stylingData.push(styling);
+        es_data.stylingData.push(styling);
+
+        generateStylesTable(es_data.stylingData);
+        $('#es-update-styling').hide();
+        saveStyles();
     }
-    generateStylesTable(data.stylingData);
-    $('#es-update-styling').hide();
-    saveStyles();
 });
 $('#es-update-styling').on('click', function () {
     var name = $('#es-styling-input').val();
-    if (!!name && name.length > 0 && !!es_backgroundColor && !!es_fontColor) {
+    if (name && name.length > 0 && es_backgroundColor && es_fontColor) {
         es_selectedStyling.name = name;
         es_selectedStyling.backroundColor = 'rgba(' + es_backgroundColor.r + ',' + es_backgroundColor.g + ',' + es_backgroundColor.b + ',' + es_backgroundColor.a + ')';
         es_selectedStyling.fontColor = 'rgba(' + es_fontColor.r + ',' + es_fontColor.g + ',' + es_fontColor.b + ',' + es_fontColor.a + ')'
+
+        updateStylingData(es_selectedStyling);
+        $('#es-update-styling').hide();
+        saveStyles();
     }
-    updateStylingData(es_selectedStyling);
-    $('#es-update-styling').hide();
-    saveStyles();
 })

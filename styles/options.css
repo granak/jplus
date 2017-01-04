@@ -27,3 +27,9 @@ body{
 #es-table>tbody tr {
     cursor: pointer;
 }
+#qj-update-styling {
+    display: none;
+}
+#qj-table>tbody tr {
+    cursor: pointer;
+}

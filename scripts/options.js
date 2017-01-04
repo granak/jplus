@@ -7,6 +7,9 @@ var rightClickActions;
 var quickJump;
 
 var extraStylingData;
+var definitionOfReadyData;
+var rightClickActionsData;
+var quickJumpData;
 
 function showSuccess(message) {
     var timeout = 750;
@@ -39,7 +42,10 @@ function restoreLocalOptions() {
         defintionOfReady: true,
         rightClickActions: true,
         quickJump: true,
-        extraStylingData: { hideNoneItems: true, stylingData: []}
+        extraStylingData: { hideNoneItems: true, stylingData: [] },
+        definitionOfReadyData: '',
+        rightClickActionsData: { showBrowserContextMenu: true, extendJiraContextMenu: true },
+        quickJumpData: { stylingData: [] }
     }, function (items) {
         jiraUrl = items.jiraUrl;
         jPlusSettingsUrl = items.jPlusSettingsUrl;
@@ -50,6 +56,9 @@ function restoreLocalOptions() {
         quickJump = items.quickJump;
 
         extraStylingData = items.extraStylingData;
+        definitionOfReadyData = items.definitionOfReadyData;
+        rightClickActionsData = items.rightClickActionsData;
+        quickJumpData = items.quickJumpData;
 
         $('#jira-url').val(jiraUrl);
         $('#settings-url').val(jPlusSettingsUrl);
@@ -60,14 +69,20 @@ function restoreLocalOptions() {
         $('#quickJumpSwitchOption').prop('checked', quickJump);
 
         toggleCustomizationPanels();
-        $(document).trigger('optionsLoaded', extraStylingData);
+        var savedData = {
+            styling: extraStylingData,
+            definitionOfReady: definitionOfReadyData,
+            rightClickActions: rightClickActionsData,
+            quickJump: quickJumpData
+        }
+        $(document).trigger('optionsLoaded', savedData);
     });
 }
 
 function restoreRemoteOptions() {
 
-        toggleCustomizationPanels();
-        $(document).trigger('optionsLoaded');
+    toggleCustomizationPanels();
+    $(document).trigger('optionsLoaded');
 }
 
 function saveLocalOptions() {
@@ -89,6 +104,15 @@ function saveLocalOptions() {
         quickJump: quickJump
     }, function () {
         showSuccess('Saved');
+    });
+}
+
+function clearStorage() {
+    chrome.storage.sync.clear(function () {
+        var error = chrome.runtime.lastError;
+        if (error) {
+            console.error(error);
+        }
     });
 }
 
