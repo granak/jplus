@@ -135,7 +135,12 @@ $(document).on('DOMContentLoaded', function () {
     restoreLocalOptions();
 });
 
-// On checkbox stat changed
+// On Jira Url changed save
+$('#jira-url').on('blur', function () {
+    saveLocalOptions();
+});
+
+// On checkbox state changed
 $('#master-options input[type="checkbox"]').on('change', function (e) {
     saveLocalOptions();
 });

@@ -32,7 +32,8 @@
             "css": [
                 "styles/plus.css",
                 "styles/quick-jump.css"
-            ]
+            ],
+            "run_at": "document_end"
         }
     ],
     "icons": {
@@ -45,6 +46,7 @@
         "chrome_style": true
     },
     "web_accessible_resources": [
+        "jira-modifications/jplus-global.js",
         "jira-modifications/extra-active-board.js",
         "jira-modifications/extra-planning-board.js",
         "jira-modifications/definition-of-done.js",

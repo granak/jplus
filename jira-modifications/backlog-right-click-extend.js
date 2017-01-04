@@ -9,7 +9,7 @@ JPlus.PlanContextMenuController._resolveActionsForContext = GH.PlanContextMenuCo
 
 JPlus.Extending.SetPoints = function (selectedIssues, points) {
     $.each(selectedIssues, function (index, value) {
-        var jiraApiUrl = "https://jira.solarwinds.com/rest/api/latest/issue/";
+        var jiraApiUrl = JPlus.OptionsData.jiraUrl + "/rest/api/latest/issue/";
         var jiraTicket = value;
         console.info(value);
         var jiraUpdateObject = {
@@ -23,31 +23,36 @@ JPlus.Extending.SetPoints = function (selectedIssues, points) {
 }
 
 GH.PlanContextMenuController.resolveActionsForContext = function (a) {
-    console.info('overridden');
     var baseActions = JPlus.PlanContextMenuController._resolveActionsForContext(a);
 
-    var extendedStoryPointsActions = [];
+    if (JPlus.Options.Data &&
+        JPlus.Options.Data.jiraUrl &&
+        JPlus.Options.Data.jiraUrl.length > 0 &&
+        JPlus.Options.Data.rightClickActions &&
+        JPlus.Options.Data.rightClickActionsData &&
+        JPlus.Options.Data.rightClickActionsData.extendJiraContextMenu) {
+        var extendedStoryPointsActions = [];
 
-    $.each([0.5, 1, 2, 3, 5, 8], function (index, value) {
-        extendedStoryPointsActions.push({
-            id: "jplus-story-points-" + value,
-            name: value,
-            label: value,
-            actionFn: function () {
-                JPlus.Extending.SetPoints(a.selectedIssues, value);
-            }
+        $.each([0.5, 1, 2, 3, 5, 8], function (index, value) {
+            extendedStoryPointsActions.push({
+                id: "jplus-story-points-" + value,
+                name: value,
+                label: value,
+                actionFn: function () {
+                    JPlus.Extending.SetPoints(a.selectedIssues, value);
+                }
+            });
         });
-    });
 
-    baseActions.push({
-        id: "jplus-story-points",
-        label: "Story points",
-        actions: extendedStoryPointsActions
-    });
-
+        baseActions.push({
+            id: "jplus-story-points",
+            label: "Story points",
+            actions: extendedStoryPointsActions
+        });
+    }
+    
     return baseActions;
 };
-
 
 function updateJira(url, updateObject) {
     $.ajax({

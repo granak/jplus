@@ -1,3 +1,13 @@
+var _options = {};
+
+window.addEventListener('message', function (event) {
+    if (event.data && event.data.type) {
+        if (event.data.type === 'jplus-get-options') {
+            getSavedOptions(true);
+        }
+    }
+});
+
 /// Checking page meta tag
 function getJiraMetaTag() {
     var metaTags = document.getElementsByTagName('meta');
@@ -13,16 +23,20 @@ function getJiraMetaTag() {
 
 if (getJiraMetaTag() == "JIRA") {
     getSavedOptions();
+    applyCustomScripts();
     makeBoardMutations();
-    if ($('.issue-container')) {
+}
+
+function applyCustomScripts() {
+    injectScript('jira-modifications/jplus-global.js');
+    if (_options.defintionOfReady && $('.issue-container')) {
         injectScript('jira-modifications/definition-of-ready.js');
     }
 }
 
-function getSavedOptions() {
+function getSavedOptions(sendPost = false) {
     chrome.storage.sync.get({
         jiraUrl: '',
-        jPlusSettingsUrl: '',
         extraStyling: true,
         defintionOfDone: true,
         defintionOfReady: true,
@@ -33,40 +47,18 @@ function getSavedOptions() {
         rightClickActionsData: { showBrowserContextMenu: true, extendJiraContextMenu: true },
         quickJumpData: { stylingData: [] }
     }, function (items) {
-        console.log(items);
-        // jiraUrl = items.jiraUrl;
-        // jPlusSettingsUrl = items.jPlusSettingsUrl;
-        // extraStyling = items.extraStyling;
-        // defintionOfDone = items.defintionOfDone;
-        // defintionOfReady = items.defintionOfReady;
-        // rightClickActions = items.rightClickActions;
-        // quickJump = items.quickJump;
-
-        // extraStylingData = items.extraStylingData;
-        // definitionOfReadyData = items.definitionOfReadyData;
-        // rightClickActionsData = items.rightClickActionsData;
-        // quickJumpData = items.quickJumpData;
-
-        // $('#jira-url').val(jiraUrl);
-        // $('#settings-url').val(jPlusSettingsUrl);
-        // $('#extraStylingSwitchOption').prop('checked', extraStyling);
-        // $('#dodSwitchOption').prop('checked', defintionOfDone);
-        // $('#dorSwitchOption').prop('checked', defintionOfReady);
-        // $('#rightClickSwitchOption').prop('checked', rightClickActions);
-        // $('#quickJumpSwitchOption').prop('checked', quickJump);
-
-        // toggleCustomizationPanels();
-        // var savedData = {
-        //     styling: extraStylingData,
-        //     definitionOfReady: definitionOfReadyData,
-        //     rightClickActions: rightClickActionsData,
-        //     quickJump: quickJumpData
-        // }
-        // $(document).trigger('optionsLoaded', savedData);
+        if (sendPost) {
+            window.postMessage({ type: 'jplus-options', options: items }, items.jiraUrl);
+        }
+        _options = items;
     });
 }
 
 function makeBoardMutations() {
+    if (!_options) {
+        return;
+    }
+
     var targetNodes = [$('#ghx-work'), $('#ghx-plan')];
     var MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
     var myObserver = new MutationObserver(mutationHandler);
@@ -84,17 +76,28 @@ function makeBoardMutations() {
     function mutationHandler(mutationRecords) {
         mutationRecords.forEach(function (mutation) {
             if (typeof mutation.attributes) {
+                getSavedOptions();
                 if (mutation.target.id === 'ghx-work' && mutation.target.style.display !== 'none' && !activeScriptInjected) {
-                    injectScript('jira-modifications/extra-active-board.js');
-                    if ($('#ghx-board-name').attr('data-view-id') == "1205") {
+                    if (_options.extraStyling) {
+                        injectScript('jira-modifications/extra-active-board.js');
+                    }
+                    if (_options.defintionOfDone && $('#ghx-board-name').attr('data-view-id') == "1205") {  // TODO: board specific
                         injectScript('jira-modifications/definition-of-done.js');
                     }
                     activeScriptInjected = true;
                 }
                 if (mutation.target.id === 'ghx-plan' && mutation.target.style.display !== 'none' && !planningScriptInjected) {
-                    injectScript('jira-modifications/quick-jump-navigation.js');
-                    injectScript('jira-modifications/extra-planning-board.js');
-                    injectScriptToBody('jira-modifications/backlog-right-click-extend.js');
+                    if (_options.quickJump) {
+                        injectScript('jira-modifications/quick-jump-navigation.js');
+                    }
+                    if (_options.extraStyling) {
+                        injectScript('jira-modifications/extra-planning-board.js');
+                    }
+                    if (_options.rightClickActions &&
+                        _options.rightClickActionsData &&
+                        _options.rightClickActionsData.extendJiraContextMenu) {
+                        injectScriptToBody('jira-modifications/backlog-right-click-extend.js');
+                    }
                     planningScriptInjected = true;
                 }
             }
