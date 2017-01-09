@@ -38,7 +38,7 @@ function getSavedOptions(sendPost = false) {
     chrome.storage.sync.get({
         jiraUrl: '',
         extraStyling: true,
-        defintionOfDone: true,
+        defintionOfDone: false,
         defintionOfReady: true,
         rightClickActions: true,
         quickJump: true,

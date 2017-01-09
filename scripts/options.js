@@ -2,7 +2,7 @@ var jiraUrl = '';
 var jPlusSettingsUrl = '';
 var extraStyling;
 var defintionOfDone;
-var defintionOfReady;
+var definitionOfReady;
 var rightClickActions;
 var quickJump;
 
@@ -35,36 +35,54 @@ function showAlert(id, message, timeout) {
 
 function restoreLocalOptions() {
     chrome.storage.sync.get({
-        jiraUrl: '',
-        jPlusSettingsUrl: '',
-        extraStyling: true,
-        defintionOfDone: true,
-        defintionOfReady: true,
-        rightClickActions: true,
-        quickJump: true,
-        extraStylingData: { hideNoneItems: true, stylingData: [] },
-        definitionOfReadyData: '',
-        rightClickActionsData: { showBrowserContextMenu: true, extendJiraContextMenu: true },
-        quickJumpData: { stylingData: [] }
+        jplus: {
+            connection: {
+                jiraUrl: '',
+                jPlusSettingsUrl: ''
+            },
+            customizations: {
+                extraStyling: {
+                    enabled: true,
+                    data: { hideNoneItems: true, styling: [] }
+                },
+                defintionOfDone: {
+                    enabled: false,
+                    data: {}
+                },
+                definitionOfReady: {
+                    enabled: true,
+                    data: { text: '' }
+                },
+                rightClickActions: {
+                    enabled: true,
+                    data: { showBrowserContextMenu: true, extendJiraContextMenu: true }
+                },
+                quickJump: {
+                    enabled: true,
+                    data: { styling: [] }
+                }
+            }
+        }
     }, function (items) {
-        jiraUrl = items.jiraUrl;
-        jPlusSettingsUrl = items.jPlusSettingsUrl;
-        extraStyling = items.extraStyling;
-        defintionOfDone = items.defintionOfDone;
-        defintionOfReady = items.defintionOfReady;
-        rightClickActions = items.rightClickActions;
-        quickJump = items.quickJump;
+        jiraUrl = items.jplus.connection.jiraUrl;
+        jPlusSettingsUrl = items.jplus.connection.jPlusSettingsUrl;
 
-        extraStylingData = items.extraStylingData;
-        definitionOfReadyData = items.definitionOfReadyData;
-        rightClickActionsData = items.rightClickActionsData;
-        quickJumpData = items.quickJumpData;
+        extraStyling = items.jplus.customizations.extraStyling.enabled;
+        defintionOfDone = items.jplus.customizations.defintionOfDone.enabled;
+        definitionOfReady = items.jplus.customizations.definitionOfReady.enabled;
+        rightClickActions = items.jplus.customizations.rightClickActions.enabled;
+        quickJump = items.jplus.customizations.quickJump.enabled;
+
+        extraStylingData = items.jplus.customizations.extraStyling.data;
+        definitionOfReadyData = items.jplus.customizations.definitionOfReady.data;
+        rightClickActionsData = items.jplus.customizations.rightClickActions.data;
+        quickJumpData = items.jplus.customizations.quickJump.data;
 
         $('#jira-url').val(jiraUrl);
         $('#settings-url').val(jPlusSettingsUrl);
         $('#extraStylingSwitchOption').prop('checked', extraStyling);
         $('#dodSwitchOption').prop('checked', defintionOfDone);
-        $('#dorSwitchOption').prop('checked', defintionOfReady);
+        $('#dorSwitchOption').prop('checked', definitionOfReady);
         $('#rightClickSwitchOption').prop('checked', rightClickActions);
         $('#quickJumpSwitchOption').prop('checked', quickJump);
 
@@ -90,18 +108,34 @@ function saveLocalOptions() {
     jPlusSettingsUrl = $('#settings-url').val();
     extraStyling = $('#extraStylingSwitchOption').prop('checked');
     defintionOfDone = $('#dodSwitchOption').prop('checked');
-    defintionOfReady = $('#dorSwitchOption').prop('checked');
+    definitionOfReady = $('#dorSwitchOption').prop('checked');
     rightClickActions = $('#rightClickSwitchOption').prop('checked');
     quickJump = $('#quickJumpSwitchOption').prop('checked');
 
     chrome.storage.sync.set({
-        jiraUrl: jiraUrl,
-        jPlusSettingsUrl: jPlusSettingsUrl,
-        extraStyling: extraStyling,
-        defintionOfDone: defintionOfDone,
-        defintionOfReady: defintionOfReady,
-        rightClickActions: rightClickActions,
-        quickJump: quickJump
+        jplus: {
+            connection: {
+                jiraUrl: jiraUrl,
+                jPlusSettingsUrl: jPlusSettingsUrl
+            },
+            customizations: {
+                extraStyling: {
+                    enabled: extraStyling
+                },
+                defintionOfDone: {
+                    enabled: defintionOfDone
+                },
+                definitionOfReady: {
+                    enabled: definitionOfReady
+                },
+                rightClickActions: {
+                    enabled: rightClickActions
+                },
+                quickJump: {
+                    enabled: quickJump
+                }
+            }
+        }
     }, function () {
         showSuccess('Saved');
     });
@@ -119,7 +153,7 @@ function clearStorage() {
 function toggleCustomizationPanels() {
     toggleCustomizationPanel($('#extra-styling-panel'), extraStyling);
     toggleCustomizationPanel($('#definition-of-done-panel'), defintionOfDone);
-    toggleCustomizationPanel($('#definition-of-ready-panel'), defintionOfReady);
+    toggleCustomizationPanel($('#definition-of-ready-panel'), definitionOfReady);
     toggleCustomizationPanel($('#right-click-actions-panel'), rightClickActions);
     toggleCustomizationPanel($('#quick-jump-panel'), quickJump);
 }
