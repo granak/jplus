@@ -1,39 +1,45 @@
-var jiraUrl = '';
-var jPlusSettingsUrl = '';
-var extraStyling;
-var defintionOfDone;
-var definitionOfReady;
-var rightClickActions;
-var quickJump;
-
-var extraStylingData;
-var definitionOfReadyData;
-var rightClickActionsData;
-var quickJumpData;
-
-function showSuccess(message) {
-    var timeout = 750;
-    showAlert('success-message-area', message, timeout);
-}
-function showWarning(message) {
-    var timeout = 2000;
-    showAlert('warning-message-area', message, timeout);
-}
-function showError(message) {
-    var timeout = 5000;
-    showAlert('error-message-area', message, timeout);
+if (typeof JPlus == 'undefined') {
+    var JPlus = {};
 }
 
-function showAlert(id, message, timeout) {
-    var messageArea = $('#' + id);
-    messageArea.text(message);
-    messageArea.fadeIn();
-    setTimeout(function () {
-        messageArea.fadeOut();
-    }, timeout);
+if (typeof JPlus.Options == 'undefined') {
+    JPlus.Options = {};
+}
+if (typeof JPlus.Options.Data == 'undefined') {
+    JPlus.Options.Data = {};
+}
+if (typeof JPlus.Options.Data.connection == 'undefined') {
+    JPlus.Options.Data.connection = {
+        jiraUrl: '',
+        jPlusSettingsUrl: ''
+    };
+}
+if (typeof JPlus.Options.Data.customizations == 'undefined') {
+    JPlus.Options.Data.customizations = {
+        extraStyling: {
+            enabled: true,
+            data: { hideNoneItems: true, styling: [] }
+        },
+        defintionOfDone: {
+            enabled: false,
+            data: {}
+        },
+        definitionOfReady: {
+            enabled: true,
+            data: { text: '' }
+        },
+        rightClickActions: {
+            enabled: true,
+            data: { showBrowserContextMenu: true, extendJiraContextMenu: true }
+        },
+        quickJump: {
+            enabled: true,
+            data: { styling: [] }
+        }
+    };
 }
 
-function restoreLocalOptions() {
+JPlus.Options.Get = function () {
     chrome.storage.sync.get({
         jplus: {
             connection: {
@@ -64,83 +70,67 @@ function restoreLocalOptions() {
             }
         }
     }, function (items) {
-        jiraUrl = items.jplus.connection.jiraUrl;
-        jPlusSettingsUrl = items.jplus.connection.jPlusSettingsUrl;
-
-        extraStyling = items.jplus.customizations.extraStyling.enabled;
-        defintionOfDone = items.jplus.customizations.defintionOfDone.enabled;
-        definitionOfReady = items.jplus.customizations.definitionOfReady.enabled;
-        rightClickActions = items.jplus.customizations.rightClickActions.enabled;
-        quickJump = items.jplus.customizations.quickJump.enabled;
-
-        extraStylingData = items.jplus.customizations.extraStyling.data;
-        definitionOfReadyData = items.jplus.customizations.definitionOfReady.data;
-        rightClickActionsData = items.jplus.customizations.rightClickActions.data;
-        quickJumpData = items.jplus.customizations.quickJump.data;
-
-        $('#jira-url').val(jiraUrl);
-        $('#settings-url').val(jPlusSettingsUrl);
-        $('#extraStylingSwitchOption').prop('checked', extraStyling);
-        $('#dodSwitchOption').prop('checked', defintionOfDone);
-        $('#dorSwitchOption').prop('checked', definitionOfReady);
-        $('#rightClickSwitchOption').prop('checked', rightClickActions);
-        $('#quickJumpSwitchOption').prop('checked', quickJump);
-
-        toggleCustomizationPanels();
-        var savedData = {
-            styling: extraStylingData,
-            definitionOfReady: definitionOfReadyData,
-            rightClickActions: rightClickActionsData,
-            quickJump: quickJumpData
-        }
-        $(document).trigger('optionsLoaded', savedData);
+        JPlus.Options.Data = items.jplus;
+        $(document).trigger('JPlusOptionsLoaded');
     });
 }
-
-function restoreRemoteOptions() {
-
-    toggleCustomizationPanels();
-    $(document).trigger('optionsLoaded');
-}
-
-function saveLocalOptions() {
-    jiraUrl = $('#jira-url').val();
-    jPlusSettingsUrl = $('#settings-url').val();
-    extraStyling = $('#extraStylingSwitchOption').prop('checked');
-    defintionOfDone = $('#dodSwitchOption').prop('checked');
-    definitionOfReady = $('#dorSwitchOption').prop('checked');
-    rightClickActions = $('#rightClickSwitchOption').prop('checked');
-    quickJump = $('#quickJumpSwitchOption').prop('checked');
-
+JPlus.Options.Save = function () {
     chrome.storage.sync.set({
-        jplus: {
-            connection: {
-                jiraUrl: jiraUrl,
-                jPlusSettingsUrl: jPlusSettingsUrl
-            },
-            customizations: {
-                extraStyling: {
-                    enabled: extraStyling
-                },
-                defintionOfDone: {
-                    enabled: defintionOfDone
-                },
-                definitionOfReady: {
-                    enabled: definitionOfReady
-                },
-                rightClickActions: {
-                    enabled: rightClickActions
-                },
-                quickJump: {
-                    enabled: quickJump
-                }
-            }
-        }
+        jplus: JPlus.Options.Data
     }, function () {
         showSuccess('Saved');
     });
 }
 
+/* View update functions */
+function showSuccess(message) {
+    var timeout = 750;
+    showAlert('success-message-area', message, timeout);
+}
+function showWarning(message) {
+    var timeout = 2000;
+    showAlert('warning-message-area', message, timeout);
+}
+function showError(message) {
+    var timeout = 5000;
+    showAlert('error-message-area', message, timeout);
+}
+function showAlert(id, message, timeout) {
+    var messageArea = $('#' + id);
+    messageArea.text(message);
+    messageArea.fadeIn();
+    setTimeout(function () {
+        messageArea.fadeOut();
+    }, timeout);
+}
+
+function refreshView() {
+    $('#jira-url').val(JPlus.Options.Data.connection.jiraUrl);
+    $('#settings-url').val(JPlus.Options.Data.connection.jPlusSettingsUrl);
+    $('#extra-styling-switch-option').prop('checked', JPlus.Options.Data.customizations.extraStyling.enabled);
+    $('#dod-switch-option').prop('checked', JPlus.Options.Data.customizations.defintionOfDone.enabled);
+    $('#dor-switch-option').prop('checked', JPlus.Options.Data.customizations.definitionOfReady.enabled);
+    $('#right-click-switch-option').prop('checked', JPlus.Options.Data.customizations.rightClickActions.enabled);
+    $('#quick-jump-switch-option').prop('checked', JPlus.Options.Data.customizations.quickJump.enabled);
+
+    toggleCustomizationPanels();
+}
+function toggleCustomizationPanels() {
+    toggleCustomizationPanel($('#extra-styling-panel .collapse'), JPlus.Options.Data.customizations.extraStyling.enabled);
+    toggleCustomizationPanel($('#definition-of-done-panel .collapse'), JPlus.Options.Data.customizations.defintionOfDone.enabled);
+    toggleCustomizationPanel($('#definition-of-ready-panel .collapse'), JPlus.Options.Data.customizations.definitionOfReady.enabled);
+    toggleCustomizationPanel($('#right-click-actions-panel .collapse'), JPlus.Options.Data.customizations.rightClickActions.enabled);
+    toggleCustomizationPanel($('#quick-jump-panel .collapse'), JPlus.Options.Data.customizations.quickJump.enabled);
+}
+function toggleCustomizationPanel(element, property) {
+    if (property === true) {
+        element.collapse('show');
+    } else {
+        element.collapse('hide');
+    }
+}
+
+/* Only for debug */
 function clearStorage() {
     chrome.storage.sync.clear(function () {
         var error = chrome.runtime.lastError;
@@ -150,39 +140,32 @@ function clearStorage() {
     });
 }
 
-function toggleCustomizationPanels() {
-    toggleCustomizationPanel($('#extra-styling-panel'), extraStyling);
-    toggleCustomizationPanel($('#definition-of-done-panel'), defintionOfDone);
-    toggleCustomizationPanel($('#definition-of-ready-panel'), definitionOfReady);
-    toggleCustomizationPanel($('#right-click-actions-panel'), rightClickActions);
-    toggleCustomizationPanel($('#quick-jump-panel'), quickJump);
-}
-function toggleCustomizationPanel(element, property) {
-    if (property === true) {
-        element.show();
-    } else {
-        element.hide();
-    }
-}
-
+/* Events */
 $(document).on('DOMContentLoaded', function () {
-    restoreLocalOptions();
+    JPlus.Options.Get();
+});
+$(document).on('JPlusOptionsLoaded', function (event) {
+    refreshView();
 });
 
 // On Jira Url changed save
 $('#jira-url').on('blur', function () {
-    saveLocalOptions();
+    JPlus.Options.Data.connection.jiraUrl = $('#jira-url').val();
+    JPlus.Options.Save();
 });
 
 // On checkbox state changed
-$('#master-options input[type="checkbox"]').on('change', function (e) {
-    saveLocalOptions();
+$('.panel-heading input[type="checkbox"]').on('change', function (e) {
+    JPlus.Options.Data.customizations.extraStyling.enabled = $('#extra-styling-switch-option').prop('checked');
+    JPlus.Options.Data.customizations.defintionOfDone.enabled = $('#dod-switch-option').prop('checked');
+    JPlus.Options.Data.customizations.definitionOfReady.enabled = $('#dor-switch-option').prop('checked');
+    JPlus.Options.Data.customizations.rightClickActions.enabled = $('#right-click-switch-option').prop('checked');
+    JPlus.Options.Data.customizations.quickJump.enabled = $('#quick-jump-switch-option').prop('checked');
+    JPlus.Options.Save();
+    refreshView();
+    $(document).trigger('JPlusOptionsLoaded');  // should be another event, on options changed or something like that
 });
 
 // On tab changed
 $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-    var target = $(e.target).attr("href");
-    if (target === '#customization') {
-        restoreLocalOptions();
-    }
 });

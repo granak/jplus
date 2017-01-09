@@ -1,28 +1,20 @@
-var rcData;
-
-function saveRightClickData() {
-    chrome.storage.sync.set({
-        rightClickActionsData: rcData
-    }, function () {
-        showSuccess('Saved');
-    });
-}
-
 // Saved Options loaded
-$(document).on('optionsLoaded', function (event, inputData) {
-    rcData = inputData.rightClickActions;
-
-    if (rcData) {
-        $('#rc-browser-context-menu').prop('checked', rcData.showBrowserContextMenu);
-        $('#rc-jira-context-menu').prop('checked', rcData.extendJiraContextMenu);
+$(document).on('JPlusOptionsLoaded', function (event) {
+    if (JPlus != undefined &&
+        JPlus.Options != undefined &&
+        JPlus.Options.Data != undefined) {
+        if (JPlus.Options.Data.customizations.rightClickActions.enabled) {
+            $('#rc-browser-context-menu').prop('checked', JPlus.Options.Data.customizations.rightClickActions.data.showBrowserContextMenu);
+            $('#rc-jira-context-menu').prop('checked', JPlus.Options.Data.customizations.rightClickActions.data.extendJiraContextMenu);
+        }
     }
 });
 
 $('#rc-browser-context-menu').on('change', function (e) {
-    rcData.showBrowserContextMenu = $('#rc-browser-context-menu').prop('checked');
-    saveRightClickData();
+    JPlus.Options.Data.customizations.rightClickActions.data.showBrowserContextMenu = $('#rc-browser-context-menu').prop('checked');
+    JPlus.Options.Save();
 });
 $('#rc-jira-context-menu').on('change', function (e) {
-    rcData.extendJiraContextMenu = $('#rc-browser-context-menu').prop('checked');
-    saveRightClickData();
+    JPlus.Options.Data.customizations.rightClickActions.data.extendJiraContextMenu = $('#rc-browser-context-menu').prop('checked');
+    JPlus.Options.Save();
 });

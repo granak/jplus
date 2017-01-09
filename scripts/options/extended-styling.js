@@ -1,10 +1,8 @@
-var es_data;
-
 var es_backgroundColor;
 var es_fontColor;
 var es_selectedStyling;
 
-function initColorPickers() {
+function initExtendedStylingColorPickers() {
     $('#es-styling-background-color-picker').colorpicker({
         format: 'rgba'
     });
@@ -19,7 +17,7 @@ function initColorPickers() {
     });
 }
 
-function generateStylesTable(rows) {
+function generateStylesTable(rows, saveOnGenerate) {
     if (rows != undefined && rows.length != undefined && rows.length > 0) {
         $('#es-table').show();
         $('#es-table>tbody').empty();
@@ -30,55 +28,55 @@ function generateStylesTable(rows) {
                 '<td>' + value.backroundColor + '</td>' +
                 '<td>' + value.fontColor + '</td>' +
                 '</tr>');
-        })
+        });
+        if (saveOnGenerate) {
+            JPlus.Options.Data.customizations.extraStyling.data.styling = rows;
+            JPlus.Options.Save();
+            clearESFormInputFields();
+        }
     }
 }
 
 function updateStylingData(value) {
-    $.each(es_data.stylingData, function (index, item) {
+    var stylingData = JPlus.Options.Data.customizations.extraStyling.data.styling;
+    $.each(stylingData, function (index, item) {
         if (item.id == value.id) {
-            es_data.stylingData[index] = value;
+            stylingData[index] = value;
         }
     });
 
-    generateStylesTable(es_data.stylingData);    //regenerate table
+    generateStylesTable(stylingData, true);
 }
 
-function clearFormInputFields() {
+function clearESFormInputFields() {
     $('#es-styling-input').val('');
     $('#es-styling-background-color-picker').colorpicker('setValue', '');
     $('#es-styling-font-color-picker').colorpicker('setValue', '');
 }
 
-function saveStyles() {
-    chrome.storage.sync.set({
-        extraStylingData: es_data
-    }, function () {
-        showSuccess('Saved');
-        clearFormInputFields();
-    });
-}
-
 // Saved Options loaded
-$(document).on('optionsLoaded', function (event, inputData) {
-    initColorPickers();
-    es_data = inputData.styling;
-    $('#es-hide-none-switch').prop('checked', es_data.hideNoneItems);
+$(document).on('JPlusOptionsLoaded', function (event) {
+    initExtendedStylingColorPickers();
 
-    if (es_data.stylingData.length < 1) {
-        $('#es-table').hide();
-    }
-    else {
-        generateStylesTable(es_data.stylingData);
+    if (JPlus != undefined &&
+        JPlus.Options != undefined &&
+        JPlus.Options.Data != undefined) {
+        if (JPlus.Options.Data.customizations.extraStyling.data.styling.length < 1) {
+            $('#es-table').hide();
+        } else {
+            generateStylesTable(JPlus.Options.Data.customizations.extraStyling.data.styling, false);
+        }
+        $('#es-hide-none-switch').prop('checked', JPlus.Options.Data.customizations.extraStyling.data.hideNoneItems);
     }
 });
 
 // Styling events
 $('#es-hide-none-switch').on('change', function (e) {
-    es_data.hideNoneItems = $('#es-hide-none-switch').prop('checked');
-    saveStyles();
+    JPlus.Options.Data.customizations.extraStyling.data.hideNoneItems = $('#es-hide-none-switch').prop('checked');
+    JPlus.Options.Save();
 });
 
+// row click
 $('#es-table>tbody').on('click', 'tr', function (event) {
     $('#es-update-styling').css('display', 'inline-block'); // show
 
@@ -96,17 +94,18 @@ $('#es-table>tbody').on('click', 'tr', function (event) {
 $('#es-add-styling').on('click', function () {
     var name = $('#es-styling-input').val();
     if (name && name.length > 0 && es_backgroundColor && es_fontColor) {
+        var stylingData = JPlus.Options.Data.customizations.extraStyling.data.styling;
+
         var styling = {
-            id: es_data.stylingData.length + 1,
+            id: stylingData.length + 1,
             name: name,
             backroundColor: 'rgba(' + es_backgroundColor.r + ',' + es_backgroundColor.g + ',' + es_backgroundColor.b + ',' + es_backgroundColor.a + ')',
             fontColor: 'rgba(' + es_fontColor.r + ',' + es_fontColor.g + ',' + es_fontColor.b + ',' + es_fontColor.a + ')'
         }
-        es_data.stylingData.push(styling);
+        stylingData.push(styling);
 
-        generateStylesTable(es_data.stylingData);
+        generateStylesTable(stylingData, true);
         $('#es-update-styling').hide();
-        saveStyles();
     }
 });
 $('#es-update-styling').on('click', function () {
@@ -118,6 +117,5 @@ $('#es-update-styling').on('click', function () {
 
         updateStylingData(es_selectedStyling);
         $('#es-update-styling').hide();
-        saveStyles();
     }
 })

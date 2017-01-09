@@ -1,5 +1,3 @@
-var qj_data;
-
 var qj_backgroundColor;
 var qj_fontColor;
 var qj_selectedStyling;
@@ -19,7 +17,7 @@ function initQuickJumpColorPickers() {
     });
 }
 
-function generateQuickJumpStylesTable(rows) {
+function generateQuickJumpStylesTable(rows, saveOnGenerate) {
     if (rows != undefined && rows.length != undefined && rows.length > 0) {
         $('#qj-table').show();
         $('#qj-table>tbody').empty();
@@ -31,47 +29,47 @@ function generateQuickJumpStylesTable(rows) {
                 '<td>' + value.fontColor + '</td>' +
                 '</tr>');
         });
+        if (saveOnGenerate) {
+            JPlus.Options.Data.customizations.quickJump.data.styling = rows;
+            JPlus.Options.Save();
+            clearQJFormInputFields();
+        }
     }
 }
 
 function updateQuickJumpStylingData(value) {
-    $.each(qj_data.stylingData, function (index, item) {
+    var stylingData = JPlus.Options.Data.customizations.quickJump.data.styling;
+    $.each(stylingData, function (index, item) {
         if (item.id == value.id) {
-            qj_data.stylingData[index] = value;
+            stylingData[index] = value;
         }
     });
 
-    generateQuickJumpStylesTable(qj_data.stylingData);
+    generateQuickJumpStylesTable(stylingData, true);
 }
 
-function clearFormInputFields() {
+function clearQJFormInputFields() {
     $('#qj-styling-input').val('');
     $('#qj-styling-background-color-picker').colorpicker('setValue', '');
     $('#qj-styling-font-color-picker').colorpicker('setValue', '');
 }
 
-function saveQuickJumpStyles() {
-    chrome.storage.sync.set({
-        quickJumpData: qj_data
-    }, function () {
-        showSuccess('Saved');
-        clearFormInputFields();
-    });
-}
-
 // Saved Options loaded
-$(document).on('optionsLoaded', function (event, inputData) {
+$(document).on('JPlusOptionsLoaded', function (event) {
     initQuickJumpColorPickers();
-    qj_data = inputData.quickJump;
 
-    if (qj_data.stylingData.length < 1) {
-        $('#qj-table').hide();
-    }
-    else {
-        generateQuickJumpStylesTable(qj_data.stylingData);
+    if (JPlus != undefined &&
+        JPlus.Options != undefined &&
+        JPlus.Options.Data != undefined) {
+        if (JPlus.Options.Data.customizations.quickJump.data.styling.length < 1) {
+            $('#qj-table').hide();
+        } else {
+            generateQuickJumpStylesTable(JPlus.Options.Data.customizations.quickJump.data.styling, false);
+        }
     }
 });
 
+// row click
 $('#qj-table>tbody').on('click', 'tr', function (event) {
     $('#qj-update-styling').css('display', 'inline-block'); // show
 
@@ -89,17 +87,18 @@ $('#qj-table>tbody').on('click', 'tr', function (event) {
 $('#qj-add-styling').on('click', function () {
     var name = $('#qj-styling-input').val();
     if (name && name.length > 0 && qj_backgroundColor && qj_fontColor) {
+        var stylingData = JPlus.Options.Data.customizations.quickJump.data.styling;
+
         var styling = {
-            id: qj_data.stylingData.length + 1,
+            id: stylingData.length + 1,
             name: name,
             backroundColor: 'rgba(' + qj_backgroundColor.r + ',' + qj_backgroundColor.g + ',' + qj_backgroundColor.b + ',' + qj_backgroundColor.a + ')',
             fontColor: 'rgba(' + qj_fontColor.r + ',' + qj_fontColor.g + ',' + qj_fontColor.b + ',' + qj_fontColor.a + ')'
         }
-        qj_data.stylingData.push(styling);
+        stylingData.push(styling);
 
-        generateQuickJumpStylesTable(qj_data.stylingData);
+        generateQuickJumpStylesTable(stylingData, true);
         $('#qj-update-styling').hide();
-        saveQuickJumpStyles();
     }
 });
 $('#qj-update-styling').on('click', function () {
@@ -111,6 +110,5 @@ $('#qj-update-styling').on('click', function () {
 
         updateQuickJumpStylingData(qj_selectedStyling);
         $('#qj-update-styling').hide();
-        saveQuickJumpStyles();
     }
 })

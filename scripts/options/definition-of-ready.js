@@ -1,18 +1,16 @@
-function saveDefinitionOfReadyData(data) {
-    chrome.storage.sync.set({
-        definitionOfReadyData: data
-    }, function () {
-        showSuccess('Saved');
-    });
-}
-
-// Saved Options loaded
-$(document).on('optionsLoaded', function (event, inputData) {
-    if (inputData.definitionOfReady) {
-        $('#dor-text').val(inputData.definitionOfReady);
+/* Events */
+$(document).on('JPlusOptionsLoaded', function (event) {
+    if (JPlus != undefined &&
+        JPlus.Options != undefined &&
+        JPlus.Options.Data != undefined) {
+        if (JPlus.Options.Data.customizations.definitionOfReady.enabled &&
+            JPlus.Options.Data.customizations.definitionOfReady.data.text) {
+            $('#dor-text').val(JPlus.Options.Data.customizations.definitionOfReady.data.text);
+        }
     }
 });
 
 $('#dor-submit').on('click', function () {
-    saveDefinitionOfReadyData($('#dor-text').val());
+    JPlus.Options.Data.customizations.definitionOfReady.data.text = $('#dor-text').val();
+    JPlus.Options.Save();
 })
