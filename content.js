@@ -1,9 +1,63 @@
-var _options = {};
+if (typeof JPlus == 'undefined') {
+    var JPlus = {};
+}
 
+if (typeof JPlus.Options == 'undefined') {
+    JPlus.Options = {};
+}
+if (typeof JPlus.Options.Data == 'undefined') {
+    JPlus.Options.Data = {};
+}
+
+JPlus.ScriptsInjected = false;
+
+JPlus.Options.Get = function () {
+    chrome.storage.sync.get({
+        jplus: {
+            connection: {
+                jiraUrl: '',
+                jPlusSettingsUrl: ''
+            },
+            customizations: {
+                extraStyling: {
+                    enabled: true,
+                    data: { hideNoneItems: true, styling: [] }
+                },
+                defintionOfDone: {
+                    enabled: false,
+                    data: {}
+                },
+                definitionOfReady: {
+                    enabled: true,
+                    data: { text: '' }
+                },
+                rightClickActions: {
+                    enabled: true,
+                    data: { showBrowserContextMenu: true, extendJiraContextMenu: true }
+                },
+                quickJump: {
+                    enabled: true,
+                    data: { styling: [] }
+                }
+            }
+        }
+    }, function (items) {
+        JPlus.Options.Data = items.jplus;
+        window.postMessage({ type: 'jplus-options', data: items.jplus }, items.jplus.connection.jiraUrl);
+    });
+}
+
+/* Events */
 window.addEventListener('message', function (event) {
     if (event.data && event.data.type) {
         if (event.data.type === 'jplus-get-options') {
-            getSavedOptions(true);
+            //getSavedOptions(true);
+            JPlus.Options.Get();
+        }
+        if (event.data.type === 'jplus-options') {
+            applyCustomScripts();
+            makeBoardMutations();
+            JPlus.ScriptsInjected = true;
         }
     }
 });
@@ -22,42 +76,23 @@ function getJiraMetaTag() {
 }
 
 if (getJiraMetaTag() == "JIRA") {
-    getSavedOptions();
-    applyCustomScripts();
-    makeBoardMutations();
+    JPlus.Options.Get();
 }
 
 function applyCustomScripts() {
-    injectScript('jira-modifications/jplus-global.js');
-    if (_options.defintionOfReady && $('.issue-container')) {
-        injectScript('jira-modifications/definition-of-ready.js');
-    }
-}
-
-function getSavedOptions(sendPost = false) {
-    chrome.storage.sync.get({
-        jiraUrl: '',
-        extraStyling: true,
-        defintionOfDone: false,
-        defintionOfReady: true,
-        rightClickActions: true,
-        quickJump: true,
-        extraStylingData: { hideNoneItems: true, stylingData: [] },
-        definitionOfReadyData: '',
-        rightClickActionsData: { showBrowserContextMenu: true, extendJiraContextMenu: true },
-        quickJumpData: { stylingData: [] }
-    }, function (items) {
-        if (sendPost) {
-            window.postMessage({ type: 'jplus-options', options: items }, items.jiraUrl);
+    if (!JPlus.ScriptsInjected) {
+        injectScript('jira-modifications/jplus-global.js');
+        if (JPlus.Options.Data.customizations.definitionOfReady.enabled && $('.issue-container')) {
+            injectScript('jira-modifications/definition-of-ready.js');
         }
-        _options = items;
-    });
+    }
 }
 
 function makeBoardMutations() {
-    if (!_options) {
+    if ((!JPlus && !JPlus.Options) || JPlus.ScriptsInjected) {
         return;
     }
+    console.log('JPLUS - mutation');
 
     var targetNodes = [$('#ghx-work'), $('#ghx-plan')];
     var MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
@@ -76,26 +111,25 @@ function makeBoardMutations() {
     function mutationHandler(mutationRecords) {
         mutationRecords.forEach(function (mutation) {
             if (typeof mutation.attributes) {
-                getSavedOptions();
                 if (mutation.target.id === 'ghx-work' && mutation.target.style.display !== 'none' && !activeScriptInjected) {
-                    if (_options.extraStyling) {
+                    if (JPlus.Options.Data.customizations.extraStyling.enabled) {
                         injectScript('jira-modifications/extra-active-board.js');
                     }
-                    if (_options.defintionOfDone && $('#ghx-board-name').attr('data-view-id') == "1205") {  // TODO: board specific
+                    if (JPlus.Options.Data.customizations.defintionOfDone.enabled && $('#ghx-board-name').attr('data-view-id') == "1205") {  // TODO: board specific
                         injectScript('jira-modifications/definition-of-done.js');
                     }
                     activeScriptInjected = true;
                 }
                 if (mutation.target.id === 'ghx-plan' && mutation.target.style.display !== 'none' && !planningScriptInjected) {
-                    if (_options.quickJump) {
+                    if (JPlus.Options.Data.customizations.quickJump.enabled) {
                         injectScript('jira-modifications/quick-jump-navigation.js');
                     }
-                    if (_options.extraStyling) {
+                    if (JPlus.Options.Data.customizations.extraStyling.enabled) {
                         injectScript('jira-modifications/extra-planning-board.js');
                     }
-                    if (_options.rightClickActions &&
-                        _options.rightClickActionsData &&
-                        _options.rightClickActionsData.extendJiraContextMenu) {
+                    if (JPlus.Options.Data.customizations.rightClickActions.enabled &&
+                        JPlus.Options.Data.customizations.rightClickActions.data &&
+                        JPlus.Options.Data.customizations.rightClickActions.data.extendJiraContextMenu) {
                         injectScriptToBody('jira-modifications/backlog-right-click-extend.js');
                     }
                     planningScriptInjected = true;

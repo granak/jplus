@@ -20,18 +20,16 @@ chrome.runtime.onInstalled.addListener(function () {
     });
 });
 
-var _data = null;
+var _jiraUrl = null;
 
 (function () {
     chrome.storage.sync.get({
-        jiraUrl: '',
-        rightClickActions: true,
-        rightClickActionsData: { showBrowserContextMenu: true, extendJiraContextMenu: true }
+        jplus: {}
     }, function (items) {
         if (items) {
-            if (items.jiraUrl && items.jiraUrl.length > 0) {
+            if (items.jplus && items.jplus.connection && items.jplus.connection.jiraUrl.length > 0) {
                 if (items.rightClickActions && items.rightClickActionsData.showBrowserContextMenu) {
-                    _data = items;
+                    _jiraUrl = items.jplus.connection.jiraUrl;
                     createContextMenu();
                 }
             }
@@ -51,7 +49,7 @@ function createContextMenu() {
         var parentMenu = chrome.contextMenus.create({
             "title": "jPlus",
             "contexts": ["page"],
-            "documentUrlPatterns": [_data.jiraUrl + "/browse/*"]
+            "documentUrlPatterns": [_jiraUrl + "/browse/*"]
         });
         var storyPointsMenu = chrome.contextMenus.create({
             "title": "Story Points",
@@ -78,9 +76,9 @@ function createContextMenu() {
 }
 
 function impedimentOnClick(info, tab) {
-    if (info.pageUrl.startsWith(_data.jiraUrl + "/browse/")) {
-        var jiraApiUrl = _data.jiraUrl + "/rest/api/latest/issue/";
-        var jiraTicket = info.pageUrl.replace(_data.jiraUrl + "/browse/", "");
+    if (info.pageUrl.startsWith(_jiraUrl + "/browse/")) {
+        var jiraApiUrl = _jiraUrl + "/rest/api/latest/issue/";
+        var jiraTicket = info.pageUrl.replace(_jiraUrl + "/browse/", "");
 
         $.ajax({
             url: jiraApiUrl + jiraTicket,
@@ -99,7 +97,7 @@ function impedimentOnClick(info, tab) {
                     else {
                         var jiraUpdateObject = {
                             "update": {
-                                "customfield_10006": [{ "set": [{ "self": _data.jiraUrl + "/rest/api/2/customFieldOption/10003", "value": "Impediment" }] }]
+                                "customfield_10006": [{ "set": [{ "self": _jiraUrl + "/rest/api/2/customFieldOption/10003", "value": "Impediment" }] }]
                             }
                         };
                         updateJira(tab, info, jiraApiUrl + jiraTicket, jiraUpdateObject);
@@ -115,9 +113,9 @@ function impedimentOnClick(info, tab) {
 }
 
 function pointsOnClick(info, tab, points) {
-    if (info.pageUrl.startsWith(_data.jiraUrl + "/browse/")) {
-        var jiraApiUrl = _data.jiraUrl + "/rest/api/latest/issue/";
-        var jiraTicket = info.pageUrl.replace(_data.jiraUrl + "/browse/", "");
+    if (info.pageUrl.startsWith(_jiraUrl + "/browse/")) {
+        var jiraApiUrl = _jiraUrl + "/rest/api/latest/issue/";
+        var jiraTicket = info.pageUrl.replace(_jiraUrl + "/browse/", "");
 
         var jiraUpdateObject = {
             "update": {
