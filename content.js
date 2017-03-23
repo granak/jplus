@@ -86,7 +86,7 @@ function applyCustomScripts() {
     injectScript('jira-modifications/extra-active-board.js');
     injectScript('jira-modifications/definition-of-done.js');
     injectScript('jira-modifications/quick-jump-navigation.js');
-    injectScript('jira-modifications/extra-planning-board.js');
+    injectScript('jira-modifications/backlog.js');
     injectScriptToBody('jira-modifications/backlog-right-click-extend.js');
     JPlus.ScriptsInjected = true;
     // if (JPlus.Options.Data.customizations.definitionOfReady.enabled && $('.issue-container')) {

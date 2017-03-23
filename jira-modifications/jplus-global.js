@@ -78,7 +78,7 @@ JPlus.Init = function () {
         if (event && event.data) {
             if (event.data.type && event.data.type === 'jplus-options' && event.data.data) {
                 JPlus.Options.Data = event.data.data;
-                JPlus.log('global - data received');
+                JPlus.log('global - options data received');
             }
         } else {
             JPlus.error('Options Data not received correctly.');

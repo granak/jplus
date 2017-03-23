@@ -1,30 +1,3 @@
-var targetNodes = $("#ghx-plan");
-var MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
-var myObserver = new MutationObserver(mutationHandler);
-var obsConfig = { childList: true, characterData: false, attributes: true, subtree: true };
-var dataRendered = false;
-
-// Add a target node to the observer. Can only add one node at a time.
-targetNodes.each(function () {
-    myObserver.observe(this, obsConfig);
-});
-
-function mutationHandler(mutationRecords) {
-    mutationRecords.forEach(function (mutation) {
-        if (typeof mutation.attributes) {
-            if (mutation.attributeName == "data-rendered") {
-                dataRendered = true;
-            }
-        }
-        if (typeof mutation.childList) {
-            if (dataRendered && mutation.target.classList != undefined && mutation.target.classList.contains('ghx-issue-count')) {
-                extraPlanning();
-                $("#ghx-plan").trigger("extra-planning-applied");
-            }
-        }
-    });
-}
-
 function extraPlanning() {
     $(".js-issue").each(function (index, element) {
         var issue = $(element);
@@ -32,10 +5,10 @@ function extraPlanning() {
             var extraContent = issue.find("span.ghx-extra-field-content");
             extraContent.addClass("aui-label");
             extraContent.parent().removeClass("ghx-extra-field");
-            
+
             var ghxEnd = issue.find("span.ghx-end");
             extraContent.prependTo(ghxEnd); // move our extra fields
-            
+
             var ghxEndDiv = issue.find("div.ghx-end");  // move epic link and version inside our extra fields items
             ghxEndDiv.children("span.aui-label").each(function (index, element) {
                 $(element).prependTo(ghxEnd);
@@ -81,3 +54,35 @@ function extraPlanning() {
         color: "rgb(255,255,255)"
     });
 };
+
+$(document).on('jplus-backlog-is-loaded', function () {
+    if (GH && GH.BacklogView) {
+
+        JPlus.Override.BacklogView = {};
+        JPlus.Override.PlanDragAndDrop = {};
+
+        JPlus.Override.BacklogView.draw = GH.BacklogView.draw;
+        JPlus.Override.PlanDragAndDrop.issueUpdateHandler = GH.PlanDragAndDrop.issueUpdateHandler;
+        
+        JPlus.Extend.BacklogView = {};
+        JPlus.Extend.BacklogView.draw = function() {
+            JPlus.log('BacklogView.draw was overriden');
+            extraPlanning();
+        }
+        JPlus.Extend.PlanDragAndDrop = {};
+        JPlus.Extend.PlanDragAndDrop.issueUpdateHandler = function(){
+            JPlus.log('PlanDragAndDrop.issueUpdateHandler was overriden');
+            extraPlanning();
+        }
+
+        GH.BacklogView.draw = function () {
+            JPlus.Override.BacklogView.draw();
+            JPlus.Extend.BacklogView.draw();
+        }
+
+        GH.PlanDragAndDrop.issueUpdateHandler = function(b, h) {
+            JPlus.Override.PlanDragAndDrop.issueUpdateHandler(b, h);
+            JPlus.Extend.PlanDragAndDrop.issueUpdateHandler();
+        }
+    }
+});
