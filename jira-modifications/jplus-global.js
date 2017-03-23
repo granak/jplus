@@ -2,6 +2,9 @@ if (typeof JPlus == 'undefined') {
     var JPlus = {};
 }
 if (typeof JPlus.Options == 'undefined') {
+    JPlus.Messages = {};
+}
+if (typeof JPlus.Options == 'undefined') {
     JPlus.Options = {};
 }
 if (typeof JPlus.Options.Data == 'undefined') {
@@ -46,27 +49,6 @@ JPlus.error = function (message) {
     }
 }
 
-JPlus.Init = function () {
-    // Listen for Options changes
-    window.addEventListener('message', function (event) {
-        if (event && event.data) {
-            if (event.data.type && event.data.type === 'jplus-options' && event.data.data) {
-                JPlus.Options.Data = event.data.data;
-                JPlus.log('global - data received');
-            }
-        } else {
-            JPlus.error('Options Data not received correctly.');
-        }
-    });
-
-    // Ask for latest Options
-    JPlus.Options.Get();
-
-    if (JPlus.IsSprint) {
-        JPlus.Extend.WorkController.init();
-    }
-}
-
 JPlus.IsBacklog = function () {
     if ($('#ghx-plan').length > 0) {
         if ($("#ghx-plan").children().length > 0) {
@@ -90,6 +72,36 @@ JPlus.IsDetail = function () {
     return false;
 }
 
+JPlus.Init = function () {
+    // Listen for Options changes
+    window.addEventListener('message', function (event) {
+        if (event && event.data) {
+            if (event.data.type && event.data.type === 'jplus-options' && event.data.data) {
+                JPlus.Options.Data = event.data.data;
+                JPlus.log('global - data received');
+            }
+        } else {
+            JPlus.error('Options Data not received correctly.');
+        }
+    });
+
+    // Ask for latest Options
+    JPlus.Options.Get();
+
+    if (JPlus.IsSprint) {
+        JPlus.Extend.WorkController.init();
+    }
+}
+
+JPlus.Messages.showSuccessMsg = function (message, options = {closeable: true}) {
+    JIRA.Messages.showSuccessMsg(message, options);
+}
+JPlus.Messages.showWarningMsg = function (message, options = {closeable: true}) {
+    JIRA.Messages.showWarningMsg(message, options);
+}
+JPlus.Messages.showErrorMsg = function (message, options = {closeable: true}) {
+    JIRA.Messages.showErrorMsg(message, options);
+}
 
 JPlus.Options.Get = function () {
     window.postMessage({ type: 'jplus-get-options' }, '*');

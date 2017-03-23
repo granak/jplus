@@ -7,12 +7,12 @@ $(document).on('jplus-backlog-is-loaded', function () {
 
     JPlus.PlanContextMenuController._resolveActionsForContext = GH.PlanContextMenuController.resolveActionsForContext;
 
-    JPlus.Extend.SetPoints = function (selectedIssues, points) {
+    JPlus.Extend.SetPoints = function (selectedIssues, points, jiraUrl) {
         JPlus.log("SetPoints called");
         $.each(selectedIssues, function (index, value) {
-            var jiraApiUrl = JPlus.OptionsData.jiraUrl + "/rest/api/latest/issue/";
+            var jiraApiUrl = jiraUrl + "/rest/api/latest/issue/";
             var jiraTicket = value;
-            console.info(value);
+            JPlus.info('Ticket to update: ' + value);
             var jiraUpdateObject = {
                 "update": {
                     "customfield_10008": [{ "set": points }]
@@ -42,7 +42,7 @@ $(document).on('jplus-backlog-is-loaded', function () {
                     name: value,
                     label: value,
                     actionFn: function () {
-                        JPlus.Extending.SetPoints(a.selectedIssues, value);
+                        JPlus.Extend.SetPoints(a.selectedIssues, value, JPlus.Options.Data.connection.jiraUrl);
                     }
                 });
             });
@@ -66,12 +66,12 @@ $(document).on('jplus-backlog-is-loaded', function () {
             data: JSON.stringify(updateObject),
             contentType: "application/json",
             success: function (result) {
-                JIRA.Messages.showSuccessMsg("Action was successfully finished.", {
+                JPlus.Messages.showSuccessMsg("Action was successfully finished.", {
                     closeable: true
                 });
             },
             error: function (err) {
-                JIRA.Messages.showErrorMsg("Error occured during action. Please try again later.", {
+                JPlus.Messages.showErrorMsg("Error occured during action. Please try again later.", {
                     closeable: true
                 });
                 JPlus.error(err);
