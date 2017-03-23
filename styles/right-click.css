@@ -1,0 +1,33 @@
+/* right click sub-menu styling */
+#gh-ctx-menu-trigger_drop{
+    overflow: visible;
+}
+#gh-ctx-menu-content.aui-list>h5::after{
+    content: ">";
+    float: right;
+}
+#gh-ctx-menu-content.aui-list>h5:hover{
+    background-color: #d47815;
+    color: white;
+}
+#gh-ctx-menu-content.aui-list>h5+ul {
+    background: white;
+    border: 1px lightgray solid;
+    box-shadow: 0 3px 6px rgba(111,111,111,0.2);
+    display: none;
+    left: 50px;
+    min-width: 200px;
+    overflow: visible;
+    position: absolute;
+    z-index: 2;
+}
+#gh-ctx-menu-content.aui-list>h5+ul>li:hover {
+    background-color: #d47815;
+    color: white;
+}
+#gh-ctx-menu-content.aui-list>h5:hover+ul {
+    display: block;
+}
+#gh-ctx-menu-content.aui-list>h5+ul:hover {
+    display: block;
+}

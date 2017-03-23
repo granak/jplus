@@ -31,7 +31,8 @@
             ],
             "css": [
                 "styles/plus.css",
-                "styles/quick-jump.css"
+                "styles/quick-jump.css",
+                "styles/right-click.css"
             ],
             "run_at": "document_end"
         }
