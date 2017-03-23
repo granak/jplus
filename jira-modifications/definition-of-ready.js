@@ -28,14 +28,8 @@ function mutationHandler(mutationRecords) {
 
 function appendDoR() {
     var currentValue = $('textarea#description').val();
-    $('textarea#description').val(currentValue + '\n' + '\n' +
-        '*UAT*' + '\n' + '' + '\n' +
-        '*Unit tests*' + '\n' + 'N/A' + '\n' +
-        '*Reusability*' + '\n' + 'N/A' + '\n' +
-        '*Test Case*' + '\n' + 'N/A' + '\n' +
-        '*Documentation*' + '\n' + '{color:red}Unknown{color}' + '\n' +
-        '*QA automation*' + '\n' + 'N/A' + '\n' +
-        '*Impacts*' + '\n' + 'N/A' + '\n' +
-        '*Dependency for deployment*' + '\n' + 'WEBDEV-' + '\n');
-    $('textarea#description').css('overflow', 'visible');
+    if (JPlus && JPlus.Options && JPlus.Options.Data) {
+        $('textarea#description').val(currentValue + '\n' + JPlus.Options.Data.customizations.definitionOfReady.data.text);
+        $('textarea#description').css('overflow', 'visible');
+    }
 }
