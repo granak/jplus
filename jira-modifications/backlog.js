@@ -63,6 +63,7 @@ $(document).on('jplus-backlog-is-loaded', function () {
 
         JPlus.Override.BacklogView.draw = GH.BacklogView.draw;
         JPlus.Override.PlanDragAndDrop.issueUpdateHandler = GH.PlanDragAndDrop.issueUpdateHandler;
+        JPlus.Override.PlanDragAndDrop.sprintRankIssues = GH.PlanDragAndDrop.sprintRankIssues;
         
         JPlus.Extend.BacklogView = {};
         JPlus.Extend.BacklogView.draw = function() {
@@ -74,6 +75,10 @@ $(document).on('jplus-backlog-is-loaded', function () {
             JPlus.log('PlanDragAndDrop.issueUpdateHandler was overriden');
             extraPlanning();
         }
+        JPlus.Extend.PlanDragAndDrop.sprintRankIssues = function(){
+            JPlus.log('PlanDragAndDrop.sprintRankIssues was overriden');
+            extraPlanning();
+        }
 
         GH.BacklogView.draw = function () {
             JPlus.Override.BacklogView.draw();
@@ -83,6 +88,11 @@ $(document).on('jplus-backlog-is-loaded', function () {
         GH.PlanDragAndDrop.issueUpdateHandler = function(b, h) {
             JPlus.Override.PlanDragAndDrop.issueUpdateHandler(b, h);
             JPlus.Extend.PlanDragAndDrop.issueUpdateHandler();
+        }
+        GH.PlanDragAndDrop.sprintRankIssues = function(c, f, b, e) {
+            var result = JPlus.Override.PlanDragAndDrop.sprintRankIssues(c, f, b, e);
+            JPlus.Extend.PlanDragAndDrop.sprintRankIssues();
+            return result;
         }
     }
 });
