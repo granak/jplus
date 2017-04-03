@@ -93,19 +93,35 @@ JPlus.Init = function () {
     }
 }
 
-JPlus.Messages.showSuccessMsg = function (message, options = {closeable: true}) {
+JPlus.Messages.showSuccessMsg = function (message, options = { closeable: true }) {
     JIRA.Messages.showSuccessMsg(message, options);
 }
-JPlus.Messages.showWarningMsg = function (message, options = {closeable: true}) {
+JPlus.Messages.showWarningMsg = function (message, options = { closeable: true }) {
     JIRA.Messages.showWarningMsg(message, options);
 }
-JPlus.Messages.showErrorMsg = function (message, options = {closeable: true}) {
+JPlus.Messages.showErrorMsg = function (message, options = { closeable: true }) {
     JIRA.Messages.showErrorMsg(message, options);
 }
 
 JPlus.Options.Get = function () {
     window.postMessage({ type: 'jplus-get-options' }, '*');
-};
+}
+JPlus.Options.Customization = function (customization) {
+    if (JPlus.Options.Data &&
+        JPlus.Options.Data.connection &&
+        JPlus.Options.Data.connection.jiraUrl &&
+        JPlus.Options.Data.connection.jiraUrl.length > 0 &&
+        JPlus.Options.Data.customizations
+    ) {
+        var c = JPlus.Options.Data.customizations[customization];
+        if (c) {
+            if (c.enabled) {
+                return c.data;
+            }
+        }
+    }
+    return null;
+}
 
 /* Extend */
 // Sprint View
