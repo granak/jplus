@@ -28,10 +28,12 @@ JPlus.Backlog.ExtraPlanningStyling = function (options) {
         $("span.ghx-extra-field-content:contains(None), span.ghx-extra-field-content:contains(none)").hide();
     }
     options.styling.forEach(function (element) {
-        $('span.ghx-extra-field-content:contains(' + element.name + ')').css({
-            "background-color": element.backroundColor,
-            color: element.fontColor
-        });
+        if (element) {
+            $('span.ghx-extra-field-content:contains(' + element.name + ')').css({
+                "background-color": element.backroundColor,
+                color: element.fontColor
+            });
+        }
     }, this);
 };
 
@@ -47,19 +49,16 @@ $(document).on('jplus-backlog-is-loaded', function () {
         JPlus.Extend.BacklogView = {};
         JPlus.Extend.BacklogView.draw = function () {
             JPlus.log('BacklogView.draw was overriden');
-            JPlus.log(JPlus.Options.Customization('extraStyling'));
             JPlus.Backlog.ExtraPlanningStyling(JPlus.Options.Customization('extraStyling'));
         }
         JPlus.Extend.PlanDragAndDrop = {};
         JPlus.Extend.PlanDragAndDrop.issueUpdateHandler = function () {
             JPlus.log('PlanDragAndDrop.issueUpdateHandler was overriden');
-            JPlus.log(JPlus.Options.Customization('extraStyling'));
-            JPlus.Backlog.ExtraPlanningStyling();
+            JPlus.Backlog.ExtraPlanningStyling(JPlus.Options.Customization('extraStyling'));
         }
         JPlus.Extend.PlanDragAndDrop.sprintRankIssues = function () {
             JPlus.log('PlanDragAndDrop.sprintRankIssues was overriden');
-            JPlus.log(JPlus.Options.Customization('extraStyling'));
-            JPlus.Backlog.ExtraPlanningStyling();
+            JPlus.Backlog.ExtraPlanningStyling(JPlus.Options.Customization('extraStyling'));
         }
 
         GH.BacklogView.draw = function () {
