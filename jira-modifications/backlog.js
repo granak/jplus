@@ -24,17 +24,19 @@ JPlus.Backlog.ExtraPlanningStyling = function (options) {
             issue.addClass('jplus-issue');
         }
     });
-    if (options.hideNoneItems) {
+    if (options && options.hideNoneItems) {
         $("span.ghx-extra-field-content:contains(None), span.ghx-extra-field-content:contains(none)").hide();
     }
-    options.styling.forEach(function (element) {
-        if (element) {
-            $('span.ghx-extra-field-content:contains(' + element.name + ')').css({
-                "background-color": element.backroundColor,
-                color: element.fontColor
-            });
-        }
-    }, this);
+    if (options && options.styling) {
+        options.styling.forEach(function (style) {
+            if (style) {
+                $('span.ghx-extra-field-content:contains(' + style.name + ')').css({
+                    "background-color": style.backroundColor,
+                    "color": style.fontColor
+                });
+            }
+        }, this);
+    }
 };
 
 $(document).on('jplus-backlog-is-loaded', function () {
@@ -50,6 +52,7 @@ $(document).on('jplus-backlog-is-loaded', function () {
         JPlus.Extend.BacklogView.draw = function () {
             JPlus.log('BacklogView.draw was overriden');
             JPlus.Backlog.ExtraPlanningStyling(JPlus.Options.Customization('extraStyling'));
+            JPlus.Backlog.QuickJump(JPlus.Options.Customization('quickJump'));
         }
         JPlus.Extend.PlanDragAndDrop = {};
         JPlus.Extend.PlanDragAndDrop.issueUpdateHandler = function () {
