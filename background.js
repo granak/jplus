@@ -1,24 +1,24 @@
 // show icon
-chrome.runtime.onInstalled.addListener(function () {
-    chrome.declarativeContent.onPageChanged.removeRules(undefined, function () {
-        chrome.declarativeContent.onPageChanged.addRules([{
-            conditions: [
-                // When a page contains css class
-                new chrome.declarativeContent.PageStateMatcher({
-                    css: [".navigator-issue-only"]
-                }),
-                new chrome.declarativeContent.PageStateMatcher({
-                    css: ["#ghx-work"]
-                }),
-                new chrome.declarativeContent.PageStateMatcher({
-                    css: ["#ghx-backlog"]
-                })
-            ],
-            // ... show the page action.
-            actions: [new chrome.declarativeContent.ShowPageAction()]
-        }]);
-    });
-});
+// chrome.runtime.onInstalled.addListener(function () {
+//     chrome.declarativeContent.onPageChanged.removeRules(undefined, function () {
+//         chrome.declarativeContent.onPageChanged.addRules([{
+//             conditions: [
+//                 // When a page contains css class
+//                 new chrome.declarativeContent.PageStateMatcher({
+//                     css: [".navigator-issue-only"]
+//                 }),
+//                 new chrome.declarativeContent.PageStateMatcher({
+//                     css: ["#ghx-work"]
+//                 }),
+//                 new chrome.declarativeContent.PageStateMatcher({
+//                     css: ["#ghx-backlog"]
+//                 })
+//             ],
+//             // ... show the page action.
+//             actions: [new chrome.declarativeContent.ShowPageAction()]
+//         }]);
+//     });
+// });
 
 var _jiraUrl = null;
 
@@ -27,8 +27,15 @@ var _jiraUrl = null;
         jplus: {}
     }, function (items) {
         if (items) {
-            if (items.jplus && items.jplus.connection && items.jplus.connection.jiraUrl.length > 0) {
-                if (items.rightClickActions && items.rightClickActionsData.showBrowserContextMenu) {
+            if (items.jplus &&
+                items.jplus.connection &&
+                items.jplus.connection.jiraUrl &&
+                items.jplus.connection.jiraUrl.length > 0) {
+                if (items.jplus.customizations &&
+                    items.jplus.customizations.rightClickActions &&
+                    items.jplus.customizations.rightClickActions.enabled &&
+                    items.jplus.customizations.rightClickActions.data &&
+                    items.jplus.customizations.rightClickActions.data.showBrowserContextMenu) {
                     _jiraUrl = items.jplus.connection.jiraUrl;
                     createContextMenu();
                 }
@@ -45,7 +52,7 @@ var _jiraUrl = null;
 
 // context menus
 function createContextMenu() {
-    if (_data) {
+    if (_jiraUrl) {
         var parentMenu = chrome.contextMenus.create({
             "title": "jPlus",
             "contexts": ["page"],

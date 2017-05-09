@@ -123,38 +123,36 @@ JPlus.Options.Customization = function (customization) {
     return null;
 }
 
-/* Extend */
 // Sprint View
 JPlus.Extend.WorkController.init = function () {
     if (GH && GH.WorkController && GH.CallbackManager) {
         // this will be handy for udpate sprint view items after there are rendered
-        GH.CallbackManager.registerCallback('', GH.CallbackManager.CALLBACK_POOL_RENDERED, function () { console.log('callback'); });
+        GH.CallbackManager.registerCallback(GH.WorkController.CALLBACK_POOL_RENDERED, 'jPlusExtension', function () {
+            $(document).trigger('jplus-sprint-is-rendered');
+        });
     }
     // thiw will be handy for backlog/sprints view
     // GH.SprintView.renderAllSprints & GH.SprintView.updateSprintViewForModel
 }
-JPlus.Extend.WorkController.show = function () {
-    JPlus.log('override for workController show');
-}
-JPlus.Extend.WorkController.handleIssueUpdate = function () {
-    JPlus.log('issue was updated');
-}
+// JPlus.Extend.WorkController.show = function () {
+// }
+// JPlus.Extend.WorkController.handleIssueUpdate = function () {
+// }
+
+// Sprint View
+// if (GH && GH.WorkController) {
+//     JPlus.Override.WorkController = {};
+//     JPlus.Override.WorkController.show = GH.WorkController.show;
+//     GH.WorkController.show = function () {
+//         JPlus.Override.WorkController.show();
+//         //JPlus.Extend.WorkController.show();
+//     }
+// }
 
 // Backlog View
 JPlus.Extend.PlanController.show = function () {
     JPlus.log('override for planController show');
     $(document).trigger('jplus-backlog-is-loaded');
-}
-
-/* Override JIRA */
-// Sprint View
-if (GH && GH.WorkController) {
-    JPlus.Override.WorkController = {};
-    JPlus.Override.WorkController.show = GH.WorkController.show;
-    GH.WorkController.show = function () {
-        JPlus.Override.WorkController.show();
-        JPlus.Extend.WorkController.show();
-    }
 }
 
 // Backlog View

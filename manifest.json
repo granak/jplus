@@ -48,11 +48,11 @@
     },
     "web_accessible_resources": [
         "jira-modifications/jplus-global.js",
-        "jira-modifications/extra-active-board.js",
+        "jira-modifications/sprint-view.js",
         "jira-modifications/definition-of-done.js",
         "jira-modifications/definition-of-ready.js",
         "jira-modifications/quick-jump-navigation.js",
-        "jira-modifications/backlog.js",
+        "jira-modifications/backlog-view.js",
         "jira-modifications/backlog-right-click-extend.js"
     ]
 }

@@ -2,7 +2,7 @@ if (typeof JPlus.Backlog == 'undefined') {
     JPlus.Backlog = {};
 }
 
-JPlus.Backlog.ExtraPlanningStyling = function (options) {
+JPlus.Backlog.ExtraStyling = function (options) {
     $(".js-issue").each(function (index, element) {
         var issue = $(element);
         if (!(issue).hasClass('jplus-issue')) {
@@ -51,17 +51,17 @@ $(document).on('jplus-backlog-is-loaded', function () {
         JPlus.Extend.BacklogView = {};
         JPlus.Extend.BacklogView.draw = function () {
             JPlus.log('BacklogView.draw was overriden');
-            JPlus.Backlog.ExtraPlanningStyling(JPlus.Options.Customization('extraStyling'));
+            JPlus.Backlog.ExtraStyling(JPlus.Options.Customization('extraStyling'));
             JPlus.Backlog.QuickJump(JPlus.Options.Customization('quickJump'));
         }
         JPlus.Extend.PlanDragAndDrop = {};
         JPlus.Extend.PlanDragAndDrop.issueUpdateHandler = function () {
             JPlus.log('PlanDragAndDrop.issueUpdateHandler was overriden');
-            JPlus.Backlog.ExtraPlanningStyling(JPlus.Options.Customization('extraStyling'));
+            JPlus.Backlog.ExtraStyling(JPlus.Options.Customization('extraStyling'));
         }
         JPlus.Extend.PlanDragAndDrop.sprintRankIssues = function () {
             JPlus.log('PlanDragAndDrop.sprintRankIssues was overriden');
-            JPlus.Backlog.ExtraPlanningStyling(JPlus.Options.Customization('extraStyling'));
+            JPlus.Backlog.ExtraStyling(JPlus.Options.Customization('extraStyling'));
         }
 
         GH.BacklogView.draw = function () {

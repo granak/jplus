@@ -47,7 +47,7 @@ ul.jump-list li {
     cursor: pointer;
     border-radius: 3px;
 }
-ul.jump-list li.dream-team {
+/*ul.jump-list li.dream-team {
     background: rgba(2, 76, 222, .8);
     color: rgba(255,255,255,1);
 }
@@ -65,4 +65,4 @@ ul.jump-list li.reviewed {
 }
 ul.jump-list li.backlog {
     background: rgba(200, 200, 200, .8);
-}
+}*/
