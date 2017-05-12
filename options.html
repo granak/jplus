@@ -4,6 +4,7 @@
 <head>
     <title>jPlus Options</title>
     <script src="scripts/jquery-3.1.1.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="styles/bootstrap.min.css" />
     <link type="text/css" rel="stylesheet" href="styles/paper-bootstrap.min.css" />
     <link type="text/css" rel="stylesheet" href="styles/bootstrap-colorpicker.min.css" />
     <link type="text/css" rel="stylesheet" href="styles/material-switch.css" />
@@ -30,13 +31,18 @@
                                     <label class="control-label" for="jira-url">Jira URL</label>
                                     <input class="form-control input-sm" id="jira-url" type="text" placeholder="https://jira.your-company.com">
                                 </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Settings Share</div>
+                            <div class="panel-body">
                                 <div class="form-group">
-                                    <label class="control-label" for="settings-url">Settings URL</label>
-                                    <input class="form-control input-sm" id="settings-url" type="text" disabled>
-                                    <span class="help-block">Provide URL to get your company settings file.</span>
+                                    <a id="settings-upload" class="btn btn-primary">Upload</a>
+                                    <a id="settings-export" class="btn btn-default">Export</a>
                                 </div>
                             </div>
                         </div>
+                        
                     </div>
                     <div class="tab-pane fade" id="customization">
                         <div id="extra-styling-panel" class="panel panel-default">
@@ -209,11 +215,8 @@
                         </div>
                     </div>
                     <div class="tab-pane fade" id="about">
-                        <p>Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro
-                            fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer,
-                            iphone skateboard locavore carles etsy salvia banksy hoodie helvetica. DIY synth PBR banksy irony.
-                            Leggings gentrify squid 8-bit cred pitchfork.
-                        </p>
+                        <h1>jPlus</h1>
+                        <p></p>
                     </div>
                 </div>
             </div>
