@@ -81,6 +81,27 @@ JPlus.Options.Save = function () {
         showSuccess('Saved');
     });
 }
+JPlus.Options.Upload = function (input) {
+    try {
+        var data = JSON.parse(input);
+        console.log(data);
+        if (data.connection &&
+            data.connection.jiraUrl &&
+            data.customizations) {
+            JPlus.Options.Data = data;
+            JPlus.Options.Save();
+            $('#upload-settings-confirmation-modal').modal('hide');
+        }
+    } catch (e) {
+        showError('Error during parsing your file. Provide valid jPlus Options file.');
+        console.error(e);
+    }
+};
+JPlus.Options.Export = function () {
+    var data = JSON.stringify(JPlus.Options.Data);
+    var uriContent = "data:application/json," + encodeURIComponent(data);
+    var newWindow = window.open(uriContent, 'JSON');
+};
 
 /* View update functions */
 function showSuccess(message) {
@@ -168,4 +189,24 @@ $('.panel-heading input[type="checkbox"]').on('change', function (e) {
 
 // On tab changed
 $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+});
+
+// Settings share actions
+$('input#settings-file').on('change', function (e) {
+    if (this.files.length != 1) {
+        showError('Pick only one settings file.');
+        return;
+    }
+    var file = this.files[0];
+    if (file) {
+        var reader = new FileReader();
+        reader.readAsText(file);
+        reader.onload = function () {
+            JPlus.Options.Upload(reader.result);
+        }
+    }
+});
+$('#settings-export').on('click', function (e) {
+    e.preventDefault();
+    JPlus.Options.Export();
 });

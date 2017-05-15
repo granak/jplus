@@ -1,7 +1,7 @@
 {
     "name": "jPlus beta",
     "description": "Additional functionality and improvements for your Atlassian JIRA Project Management Software (v6.3.8+).",
-    "version": "2.0.0",
+    "version": "2.0.0.1",
     "manifest_version": 2,
     "page_action": {
         "default_icon": "jira-icon.png", // TODO: Change icon

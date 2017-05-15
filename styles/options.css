@@ -1,12 +1,25 @@
-body{
+body {
     padding-bottom: 30px;
 }
 
 .alert {
     display: none;
 }
+
 .tab-content {
     padding-top: 10px;
+}
+
+.input-file {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+.input-file + label {
+    display: inline-block;
 }
 
 .sticky-footer {
@@ -24,12 +37,15 @@ body{
 #es-update-styling {
     display: none;
 }
+
 #es-table>tbody tr {
     cursor: pointer;
 }
+
 #qj-update-styling {
     display: none;
 }
+
 #qj-table>tbody tr {
     cursor: pointer;
 }

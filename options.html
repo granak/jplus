@@ -37,12 +37,11 @@
                             <div class="panel-heading">Settings Share</div>
                             <div class="panel-body">
                                 <div class="form-group">
-                                    <a id="settings-upload" class="btn btn-primary">Upload</a>
+                                    <a id="settings-upload" class="btn btn-primary" data-toggle="modal" data-target="#upload-settings-confirmation-modal">Upload</a>
                                     <a id="settings-export" class="btn btn-default">Export</a>
                                 </div>
                             </div>
                         </div>
-                        
                     </div>
                     <div class="tab-pane fade" id="customization">
                         <div id="extra-styling-panel" class="panel panel-default">
@@ -161,7 +160,7 @@
                                         </div>
                                     </li>
                                     <li class="list-group-item">
-                                        Extend Jira® context menu
+                                        Extend Jira&reg; context menu
                                         <div class="material-switch pull-right">
                                             <input id="rc-jira-context-menu" name="rc-jira-context-menu" type="checkbox" />
                                             <label for="rc-jira-context-menu" class="label-primary"></label>
@@ -215,8 +214,10 @@
                         </div>
                     </div>
                     <div class="tab-pane fade" id="about">
-                        <h1>jPlus</h1>
-                        <p></p>
+                        <h3>jPlus beta</h3>
+                        <p>Author: granak</p>
+                        <p><a href="https://github.com/granak/jplus/blob/master/LICENSE">License</a></p>
+                        <p><a href="https://github.com/granak/jplus">Project source</a></p>
                     </div>
                 </div>
             </div>
@@ -233,6 +234,24 @@
             </div>
         </div>
     </footer>
+
+    <div class="modal fade" id="upload-settings-confirmation-modal" tabindex="-1" role="dialog" aria-labelledby="uploadConfirmationModalLabel">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="uploadConfirmationModalLabel">Upload confirmation</h4>
+                </div>
+                <div class="modal-body">
+                    <p>This action will override your current settings.</p>
+                </div>
+                <div class="modal-footer">
+                    <input type="file" name="settings-file" id="settings-file" class="input-file" />
+                    <label for="settings-file" class="btn btn-primary">Upload</label>
+                    <a class="btn btn-default" data-dismiss="modal">Cancel</a>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="scripts/options.js"></script>
     <script src="scripts/options/extended-styling.js"></script>
