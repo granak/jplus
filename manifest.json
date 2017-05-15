@@ -4,7 +4,7 @@
     "version": "2.0.0.1",
     "manifest_version": 2,
     "page_action": {
-        "default_icon": "jira-icon.png", // TODO: Change icon
+        "default_icon": "img/icon/jplus_128.png",
         "default_popup": "popup.html"   // TODO: Change popup as well
     },
     "permissions": [
@@ -38,9 +38,12 @@
         }
     ],
     "icons": {
-        "16": "jira-icon.png",
-        "48": "jira-icon.png",
-        "128": "jira-icon.png"
+        "16": "img/icon/jplus_16.png",
+        "32": "img/icon/jplus_32.png",
+        "48": "img/icon/jplus_48.png",
+        "128": "img/icon/jplus_128.png",
+        "256": "img/icon/jplus_256.png",
+        "512": "img/icon/jplus_512.png"
     },
     "options_ui": {
         "page":"options.html",
