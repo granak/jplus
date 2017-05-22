@@ -90,6 +90,8 @@ JPlus.Options.Upload = function (input) {
             data.customizations) {
             JPlus.Options.Data = data;
             JPlus.Options.Save();
+            $('input#settings-file').val('');
+            $(document).trigger('JPlusOptionsLoaded');
             $('#upload-settings-confirmation-modal').modal('hide');
         }
     } catch (e) {
