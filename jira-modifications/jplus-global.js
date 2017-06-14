@@ -130,7 +130,7 @@ JPlus.Options.Customization = function (customization) {
 //     if (GH && GH.WorkController && GH.CallbackManager) {
 //         // this will be handy for udpate sprint view items after there are rendered
 //         // GH.CallbackManager.registerCallback(GH.WorkController.CALLBACK_POOL_RENDERED, 'jPlusExtension', function () {
-            
+
 //         // });
 //     }
 //     // thiw will be handy for backlog/sprints view
@@ -178,12 +178,14 @@ JPlus.Extend.PlanController.show = function () {
 
 // Backlog View
 if (GH && GH.PlanController) {
-    JPlus.Override.PlanController = {};
-    JPlus.Override.PlanController.show = GH.PlanController.show;
-    GH.PlanController.show = function () {
-        JPlus.Override.PlanController.show();
-        JPlus.Extend.PlanController.show();
-    }
+    window.addEventListener('jplus-ready', function () {
+        JPlus.Override.PlanController = {};
+        JPlus.Override.PlanController.show = GH.PlanController.show;
+        GH.PlanController.show = function () {
+            JPlus.Override.PlanController.show();
+            JPlus.Extend.PlanController.show();
+        }
+    });
 }
 
 // if (AJS && $(GH)) {
