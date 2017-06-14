@@ -40,7 +40,14 @@ JPlus.Backlog.ExtraStyling = function (options) {
 };
 
 $(document).on('jplus-backlog-is-loaded', function () {
-    if (GH && GH.BacklogView) {
+    if (GH && GH.BacklogView && GH.BacklogController) {
+        JPlus.log('BacklogView loaded');
+
+        if (GH.BacklogController.visible)   // hanlde for switching between Active sprint and Backlog
+            return;
+
+        JPlus.log('BacklogView loaded extending');
+
         JPlus.Override.BacklogView = {};
         JPlus.Override.PlanDragAndDrop = {};
 
