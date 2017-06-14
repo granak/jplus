@@ -88,9 +88,6 @@ JPlus.Init = function () {
     // Ask for latest Options
     JPlus.Options.Get();
 
-    // if (JPlus.IsSprint) {
-    //     JPlus.Extend.WorkController.init();
-    // }
     window.dispatchEvent(new Event('jplus-ready'));
     JPlus.log('jplus-ready');
 }
@@ -126,29 +123,6 @@ JPlus.Options.Customization = function (customization) {
 }
 
 // Sprint View
-// JPlus.Extend.WorkController.init = function () {
-//     if (GH && GH.WorkController && GH.CallbackManager) {
-//         // this will be handy for udpate sprint view items after there are rendered
-//         // GH.CallbackManager.registerCallback(GH.WorkController.CALLBACK_POOL_RENDERED, 'jPlusExtension', function () {
-
-//         // });
-//     }
-//     // thiw will be handy for backlog/sprints view
-//     // GH.SprintView.renderAllSprints & GH.SprintView.updateSprintViewForModel
-// }
-// JPlus.Extend.WorkController.show = function () {
-//     if (GH && GH.WorkController && GH.CallbackManager) {
-//         // this will be handy for udpate sprint view items after there are rendered
-//         GH.CallbackManager.registerCallback(GH.WorkController.CALLBACK_POOL_RENDERED, 'jPlusExtension', function () {
-//             $(document).trigger('jplus-sprint-is-rendered');
-//         });
-//     }
-//     if (AJS && $(GH) && JPlus) {
-//         AJS.$(GH).bind("issueCreated", $(document).trigger('jplus-backlog-is-loaded'));
-//         AJS.$(GH).bind("issueUpdated", $(document).trigger('jplus-backlog-is-loaded'));
-//         AJS.$(GH).bind("issuesRemovedFromSprint", $(document).trigger('jplus-backlog-is-loaded'));
-//     }
-// }
 JPlus.Extend.WorkController.setPoolData = function (data) {
     $(document).trigger('jplus-sprint-is-rendered');
 }
@@ -163,11 +137,6 @@ if (GH && GH.WorkController) {
             JPlus.Extend.WorkController.setPoolData(data);
         }
     });
-    // JPlus.Override.WorkController.show = GH.WorkController.show;
-    // GH.WorkController.show = function () {
-    //     JPlus.Extend.WorkController.show();
-    //     JPlus.Override.WorkController.show();
-    // }
 }
 
 // Backlog View
@@ -187,14 +156,5 @@ if (GH && GH.PlanController) {
         }
     });
 }
-
-// if (AJS && $(GH)) {
-//     AJS.$(GH).bind("issueCreated", JPlus.WorkController.handleIssueUpdate);
-//     AJS.$(GH).bind("issueUpdated", JPlus.WorkController.handleIssueUpdate);
-//     AJS.$(GH).bind("issuesRemovedFromSprint", JPlus.WorkController.handleIssueUpdate)
-// }
-
-//GH.PlanController.show();
-//GH.WorkController.show();
 
 JPlus.Init();   // fire up JPlus
