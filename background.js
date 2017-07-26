@@ -1,25 +1,3 @@
-// show icon
-// chrome.runtime.onInstalled.addListener(function () {
-//     chrome.declarativeContent.onPageChanged.removeRules(undefined, function () {
-//         chrome.declarativeContent.onPageChanged.addRules([{
-//             conditions: [
-//                 // When a page contains css class
-//                 new chrome.declarativeContent.PageStateMatcher({
-//                     css: [".navigator-issue-only"]
-//                 }),
-//                 new chrome.declarativeContent.PageStateMatcher({
-//                     css: ["#ghx-work"]
-//                 }),
-//                 new chrome.declarativeContent.PageStateMatcher({
-//                     css: ["#ghx-backlog"]
-//                 })
-//             ],
-//             // ... show the page action.
-//             actions: [new chrome.declarativeContent.ShowPageAction()]
-//         }]);
-//     });
-// });
-
 var _jiraUrl = null;
 
 (function () {
@@ -58,6 +36,7 @@ function createContextMenu() {
             "contexts": ["page"],
             "documentUrlPatterns": [_jiraUrl + "/browse/*"]
         });
+
         var storyPointsMenu = chrome.contextMenus.create({
             "title": "Story Points",
             "contexts": ["page"],
@@ -77,7 +56,36 @@ function createContextMenu() {
         var impedimentMenu = chrome.contextMenus.create({
             "title": "Toggle Impediment",
             "onclick": impedimentOnClick,
+            "contexts": ["page"],
             "parentId": parentMenu
+        });
+
+        var separator = chrome.contextMenus.create({
+            type: 'separator',
+            "contexts": ["page"],
+            "parentId": parentMenu
+        });
+
+        var copyMenu = chrome.contextMenus.create({
+            "title": "Copy",
+            "contexts": ["page"],
+            "parentId": parentMenu
+        });
+        var copyTicketNumberMenu = chrome.contextMenus.create({
+            "title": "Ticket number",
+            "contexts": ["page"],
+            "onclick": function (info, tab) {
+                copyTicketInfo(info, tab, false);
+            },
+            "parentId": copyMenu
+        });
+        var copyTicketSummaryMenu = chrome.contextMenus.create({
+            "title": "Ticket number and summary",
+            "contexts": ["page"],
+            "onclick": function (info, tab) {
+                copyTicketInfo(info, tab, true);
+            },
+            "parentId": copyMenu
         });
     }
 }
@@ -151,4 +159,40 @@ function updateJira(tab, info, url, updateObject) {
             console.log(err);
         }
     });
+}
+
+function copyTicketInfo(info, tab, summary) {
+    if (info.pageUrl.startsWith(_jiraUrl + "/browse/")) {
+        var jiraApiUrl = _jiraUrl + "/rest/api/latest/issue/";
+        var jiraTicket = info.pageUrl.replace(_jiraUrl + "/browse/", "");
+        if (!summary)
+            copyToClipboard(jiraTicket);
+        else {
+            $.ajax({
+                url: jiraApiUrl + jiraTicket,
+                type: 'GET',
+                dataType: "json",
+                success: function (data) {
+                    if (data && data.fields && data.fields.summary) {
+                        copyToClipboard(jiraTicket + ' ' + data.fields.summary);
+                    }
+                },
+                error: function (err) {
+                    alert("Error. jPlus wasn't able to accomplish requested action.");
+                    console.log(err);
+                }
+            });
+        }
+    }
+}
+function copyToClipboard(text) {
+    var textArea = document.createElement("textarea");
+
+    textArea.value = text;
+    document.body.appendChild(textArea);
+    textArea.select();
+
+    document.execCommand('copy');
+
+    document.body.removeChild(textArea);
 }
