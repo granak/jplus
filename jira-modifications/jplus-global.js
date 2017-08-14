@@ -1,5 +1,6 @@
 if (typeof JPlus == 'undefined') {
     var JPlus = {};
+    JPlus.Ready = false;
 }
 if (typeof JPlus.Options == 'undefined') {
     JPlus.Messages = {};
@@ -72,26 +73,6 @@ JPlus.IsDetail = function () {
     return false;
 }
 
-JPlus.Init = function () {
-    // Listen for Options changes
-    window.addEventListener('message', function (event) {
-        if (event && event.data) {
-            if (event.data.type && event.data.type === 'jplus-options' && event.data.data) {
-                JPlus.Options.Data = event.data.data;
-                JPlus.log('global - options data received');
-            }
-        } else {
-            JPlus.error('Options Data not received correctly.');
-        }
-    });
-
-    // Ask for latest Options
-    JPlus.Options.Get();
-
-    window.dispatchEvent(new Event('jplus-ready'));
-    JPlus.log('jplus-ready');
-}
-
 JPlus.Messages.showSuccessMsg = function (message, options = { closeable: true }) {
     JIRA.Messages.showSuccessMsg(message, options);
 }
@@ -127,16 +108,16 @@ JPlus.Extend.WorkController.setPoolData = function (data) {
     $(document).trigger('jplus-sprint-is-rendered');
 }
 
-// Sprint View
-if (GH && GH.WorkController) {
-    window.addEventListener('jplus-ready', function () {
+JPlus.OverrideWorkController = function () {
+    if (GH && GH.WorkController) {
+        JPlus.info('OverrideWorkController');
         JPlus.Override.WorkController = {};
         JPlus.Override.WorkController.setPoolData = GH.WorkController.setPoolData;
         GH.WorkController.setPoolData = function (data) {
             JPlus.Override.WorkController.setPoolData(data);
             JPlus.Extend.WorkController.setPoolData(data);
         }
-    });
+    }
 }
 
 // Backlog View
@@ -145,16 +126,43 @@ JPlus.Extend.PlanController.show = function () {
     $(document).trigger('jplus-backlog-is-loaded');
 }
 
-// Backlog View
-if (GH && GH.PlanController) {
-    window.addEventListener('jplus-ready', function () {
+// Backlog View Events Registration
+JPlus.OverridePlanController = function () {
+    if (GH && GH.PlanController) {
+        JPlus.info('OverridePlanController');
         JPlus.Override.PlanController = {};
         JPlus.Override.PlanController.show = GH.PlanController.show;
         GH.PlanController.show = function () {
             JPlus.Override.PlanController.show();
             JPlus.Extend.PlanController.show();
         }
-    });
+    }
 }
 
-JPlus.Init();   // fire up JPlus
+JPlus.Init = function () {
+    if (!JPlus.Ready) {
+        // Listen for Options changes
+        window.addEventListener('message', function (event) {
+            if (event && event.data) {
+                if (event.data.type && event.data.type === 'jplus-options' && event.data.data) {
+                    JPlus.Options.Data = event.data.data;
+                    JPlus.log('global - options data received');
+                    window.dispatchEvent(new Event('jplus-ready'));
+                }
+            } else {
+                JPlus.error('Options Data not received correctly.');
+            }
+        });
+
+        // Sprint View Events Registration
+        window.addEventListener('jplus-ready', JPlus.OverrideWorkController());
+        // Backlog View Events Registration
+        window.addEventListener('jplus-ready', JPlus.OverridePlanController());
+
+        // Ask for latest Options
+        JPlus.Options.Get();
+
+        JPlus.Ready = true;
+        JPlus.log('jplus-ready');
+    }
+}

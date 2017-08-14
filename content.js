@@ -81,6 +81,7 @@ function applyCustomScripts() {
     injectScript('jira-modifications/quick-jump-navigation.js');
     injectScript('jira-modifications/backlog-view.js');
     injectScriptToBody('jira-modifications/backlog-right-click-extend.js');
+    injectScriptToBody('jira-modifications/jplus-run.js');
     JPlus.ScriptsInjected = true;
     // if (JPlus.Options.Data.customizations.definitionOfReady.enabled && $('.issue-container')) {
     //     injectScript('jira-modifications/definition-of-ready.js');

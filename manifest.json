@@ -57,6 +57,7 @@
         "jira-modifications/definition-of-ready.js",
         "jira-modifications/quick-jump-navigation.js",
         "jira-modifications/backlog-right-click-extend.js",
-        "jira-modifications/backlog-view.js"
+        "jira-modifications/backlog-view.js",
+        "jira-modifications/jplus-run.js"
     ]
 }
